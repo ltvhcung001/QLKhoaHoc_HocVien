@@ -1,5 +1,6 @@
 package ra.qlkhoahochocvien.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Course {
@@ -7,17 +8,62 @@ public class Course {
     private String name;
     private int duration;
     private String instructor;
-    private Date create_at;
+    private LocalDate create_at;
 
     public Course(int id,
                   String name,
                   int duration,
                   String instructor,
-                  Date create_at) {
+                  LocalDate create_at) {
         this.id = id;
         this.name = name;
         this.duration = duration;
         this.instructor = instructor;
         this.create_at = create_at;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public String getInstructor() {
+        return instructor;
+    }
+
+    public void setInstructor(String instructor) {
+        this.instructor = instructor;
+    }
+
+    public LocalDate getCreate_at() {
+        return create_at;
+    }
+
+    public void setCreate_at(LocalDate create_at) {
+        this.create_at = create_at;
+    }
+
+    @Override
+    public String toString() {
+        return "id: " + id + ", name: " + name  + ", duration: " + duration + ", instructor: " + instructor;
     }
 }

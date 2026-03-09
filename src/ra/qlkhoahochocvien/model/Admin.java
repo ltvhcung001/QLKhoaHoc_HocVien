@@ -5,6 +5,11 @@ public class Admin {
     private String username;
     private String password;
 
+    /*
+    * @param id
+    * @param username
+    * @param password
+    * */
     public Admin(int id, String username, String password) {
         this.id = id;
         this.username = username;

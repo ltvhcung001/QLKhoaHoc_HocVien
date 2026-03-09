@@ -12,6 +12,9 @@ public class Student {
     private String password;
     private LocalDate create_at;
 
+    public Student() {
+        create_at = LocalDate.now();
+    }
     public Student(String name,
                    LocalDate dob,
                    String email,
@@ -24,6 +27,7 @@ public class Student {
         this.sex = sex;
         this.phone = phone;
         this.password = password;
+        this.create_at = LocalDate.now();
     }
 
     public Student(int id,
@@ -100,13 +104,24 @@ public class Student {
         this.password = password;
     }
 
-    public Date getCreate_at() {
+    public LocalDate getCreate_at() {
         return create_at;
     }
 
-    public void setCreate_at(Date create_at) {
+    public void setCreate_at(LocalDate create_at) {
         this.create_at = create_at;
     }
 
-
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", dob=" + dob +
+                ", email='" + email + '\'' +
+                ", sex=" + ((sex) ? "Nam" : "Nữ") +
+                ", phone='" + phone + '\'' +
+                ", create_at=" + create_at +
+                '}';
+    }
 }

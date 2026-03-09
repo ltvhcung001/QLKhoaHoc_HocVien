@@ -19,7 +19,7 @@ create table Student(
     sex bit not null,
     phone varchar(20),
     password varchar(255) not null,
-    create_at date
+    create_at date default current_date
 );
 
 -- 4. Create table Course
@@ -43,4 +43,14 @@ create table Enrollment(
     status status_values
 );
 
+-- 6. Create fake data for Courses
+insert into course (name, duration, instructor)
+values ('Cơ sở lập trình', 90, 'Nguyễn Văn A'),
+       ('Đại số tuyến tính', 50, 'Trần Văn B'),
+       ('Giải tích 2', 70, 'Lê Vũ Phong');
 
+-- 7. Create fake data for Students
+insert into student (name, dob, email, sex, phone, password)
+values ('Nguyễn Văn C', '2000-01-15', 'nvc@gmail.com', 1::bit,'0123456778', 'password123'),
+       ('Trần Thị D', '1999-05-20', 'tranthid@gmail.com', 0::bit,'012356789', 'password456'),
+       ('Lê Văn E', '2001-09-10', 'levane@gmail.com', 1::bit, '0312980743', 'password789');
