@@ -25,7 +25,7 @@ public class StudentServiceImpl implements IStudentService {
 
     @Override
     public void showStudents() {
-        List<Student> students = studentDAO.showStudents();
+        List<Student> students = studentDAO.getStudents();
         if (students == null || students.isEmpty()) {
             System.out.println("Không có sinh viên nào.");
             return;
@@ -113,7 +113,14 @@ public class StudentServiceImpl implements IStudentService {
     public void deleteStudent(Scanner scanner) {
         System.out.print("Nhập ID sinh viên cần xóa: ");
         int id = Integer.parseInt(scanner.nextLine());
+        System.out.println("Bạn có chắc chắn muốn xóa sinh viên với ID " + id + "? (Y/N)");
+        String confirm = scanner.nextLine();
+        if (!confirm.equalsIgnoreCase("Y")) {
+            System.out.println("Hủy xóa sinh viên.");
+            return;
+        }
         studentDAO.deleteStudent(id);
+        System.out.println("Đã xóa sinh viên với ID: " + id);
     }
 
     @Override
@@ -201,6 +208,11 @@ public class StudentServiceImpl implements IStudentService {
         for (Student student : sortedStudents) {
             System.out.println(student);
         }
+    }
+
+    @Override
+    public List<Student> getStudentsList() {
+        return studentDAO.listStudentsOrderBy("id asc");
     }
 
 }

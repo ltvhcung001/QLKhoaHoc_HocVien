@@ -54,3 +54,11 @@ insert into student (name, dob, email, sex, phone, password)
 values ('Nguyễn Văn C', '2000-01-15', 'nvc@gmail.com', 1::bit,'0123456778', 'password123'),
        ('Trần Thị D', '1999-05-20', 'tranthid@gmail.com', 0::bit,'012356789', 'password456'),
        ('Lê Văn E', '2001-09-10', 'levane@gmail.com', 1::bit, '0312980743', 'password789');
+
+-- 8. Create fake data for Enrollments
+insert into enrollment (student_id, course_id, status)
+values (1, 1, 'CONFIRM'),
+         (1, 2, 'WAITING'),
+            (2, 1, 'DENIED'),
+            (2, 3, 'CONFIRM'),
+            (3, 2, 'CANCEL');

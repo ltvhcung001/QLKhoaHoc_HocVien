@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IStudentDAO {
     Student findStudentByEmail(String email);
-    List<Student> showStudents();
+    List<Student> getStudents();
     Student getStudentById(int id);
     void addStudent(Student student);
     void updateStudent(Student student);

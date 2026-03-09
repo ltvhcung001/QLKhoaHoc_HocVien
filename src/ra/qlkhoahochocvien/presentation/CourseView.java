@@ -13,14 +13,7 @@ public class CourseView {
     private static final ICourseService courseService = new CourseServiceImpl();
 
     public static void showCourseList() {
-        List<Course> courses = courseService.listCourses();
-        if (courses.isEmpty()) {
-            System.out.println("Chưa có khoá học nào.");
-            return;
-        }
-        for (Course course : courses) {
-            System.out.println(course);
-        }
+        courseService.listCourses();
     }
 
     public static void addNewCourse(Scanner scanner) {

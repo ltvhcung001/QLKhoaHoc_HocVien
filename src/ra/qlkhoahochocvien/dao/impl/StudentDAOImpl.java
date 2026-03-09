@@ -39,7 +39,7 @@ public class StudentDAOImpl implements IStudentDAO {
     }
 
     @Override
-    public List<Student> showStudents() {
+    public List<Student> getStudents() {
         String sql = "SELECT * FROM student ORDER BY id";
         try (Connection conn = DBUtil.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql);){

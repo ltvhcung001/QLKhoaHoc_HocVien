@@ -11,9 +11,18 @@ public class CourseServiceImpl implements ICourseService {
     public final ICourseDAO courseDAO = new CourseDAOImpl();
 
     @Override
-    public List<Course> listCourses() {
-        return courseDAO.listCourses();
+    public void listCourses() {
+        List<Course> courses = courseDAO.listCourses();
+        if (courses.isEmpty()) {
+            System.out.println("Chưa có khoá học nào.");
+            return;
+        }
+        System.out.println("Danh sách khoá học:");
+        for (Course course : courses) {
+            System.out.println(course);
+        }
     }
+
 
     @Override
     public Course getCourse(int id) {

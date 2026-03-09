@@ -1,8 +1,10 @@
 package ra.qlkhoahochocvien.presentation;
 
+import ra.qlkhoahochocvien.bussiness.IEnrollService;
 import ra.qlkhoahochocvien.bussiness.IStudentService;
 import ra.qlkhoahochocvien.bussiness.impl.AdminServiceImpl;
 import ra.qlkhoahochocvien.bussiness.IAdminService;
+import ra.qlkhoahochocvien.bussiness.impl.EnrollServiceImpl;
 import ra.qlkhoahochocvien.bussiness.impl.StudentServiceImpl;
 import ra.qlkhoahochocvien.model.Admin;
 
@@ -12,6 +14,7 @@ public class AdminView {
     public static Admin userAdmin = null;
     public static final IAdminService adminService = new AdminServiceImpl();
     public static final IStudentService studentService = new StudentServiceImpl();
+    public static final IEnrollService enrollService = new EnrollServiceImpl();
     public static void showMenuLogin(Scanner scanner) {
         while (true) {
             System.out.print("Nhập username: ");
@@ -62,10 +65,10 @@ public class AdminView {
                     showStudentManager(scanner);
                     break;
                 case 3:
-                    showEnrollManager();
+                    showEnrollManager(scanner);
                     break;
                 case 4:
-                    showStatistic();
+//                    showStatistic();
                     break;
                 case 5:
                     System.out.println("Đăng xuất thành công!");
@@ -157,12 +160,35 @@ public class AdminView {
         }
     }
 
-    public static void showEnrollManager() {
+    public static void showEnrollManager(Scanner scanner) throws Exception {
         while (true) {
+            System.out.println("============ QUẢN LÝ ĐĂNG KÝ HỌC ============");
             System.out.println("1. Hiển thị học viên theo từng khoá học");
             System.out.println("2. Thêm học viên vào khoá học");
             System.out.println("3. Xoá học viên khỏi khoá học");
-            System.out.println("4. Quay về menu chính");
+            System.out.println("4. Duyệt đăng ký học (chấp nhận hoặc từ chối đăng ký của học viên)");
+            System.out.println("5. Quay về menu chính");
+            System.out.print("Nhập lựa chọn của bạn: ");
+            int choice = Integer.parseInt(new Scanner(System.in).nextLine());
+            switch (choice) {
+                case 1:
+                    enrollService.showEnrollByCourse();
+                    break;
+                case 2:
+                    enrollService.addEnroll(scanner);
+                    break;
+                case 3:
+                    enrollService.deleteEnroll(scanner);
+                    break;
+                case 4:
+                    enrollService.ChangeStatus(scanner);
+                    break;
+                case 5:
+                    return;
+                default:
+                    System.out.println("Lựa chọn không hợp lệ, vui lòng chọn lại");
+                    break;
+            }
         }
     }
 
@@ -172,6 +198,7 @@ public class AdminView {
         System.out.println("3. Top 5 khoá học đông học viên nhất");
         System.out.println("4. Liệt kê khoá học có trên 10 học viên");
         System.out.println("5. Quay về menu chính");
+
     }
 
 }

@@ -5,7 +5,7 @@ import ra.qlkhoahochocvien.model.Course;
 import java.util.List;
 
 public interface ICourseService {
-    public List<Course> listCourses();
+    public void listCourses();
     public Course getCourse(int id);
     public void addCouse(Course course);
     public void updateCourse(Course course);
