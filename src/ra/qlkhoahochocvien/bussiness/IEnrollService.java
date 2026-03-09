@@ -14,4 +14,12 @@ public interface IEnrollService {
     void denyEnrollment(int studentId, int courseId);
     void deleteEnroll(Scanner scanner);
     void ChangeStatus(Scanner scanner);
+
+    void showTotalCoursesAndStudents();
+
+    void showNumberOfStudentsByCourse();
+
+    void showTop5CoursesByEnrollment();
+
+    void showCoursesWithMoreThan10Students();
 }

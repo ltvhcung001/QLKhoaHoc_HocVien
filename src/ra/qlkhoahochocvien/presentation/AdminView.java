@@ -1,13 +1,17 @@
 package ra.qlkhoahochocvien.presentation;
 
+import ra.qlkhoahochocvien.bussiness.ICourseService;
 import ra.qlkhoahochocvien.bussiness.IEnrollService;
 import ra.qlkhoahochocvien.bussiness.IStudentService;
 import ra.qlkhoahochocvien.bussiness.impl.AdminServiceImpl;
 import ra.qlkhoahochocvien.bussiness.IAdminService;
+import ra.qlkhoahochocvien.bussiness.impl.CourseServiceImpl;
 import ra.qlkhoahochocvien.bussiness.impl.EnrollServiceImpl;
 import ra.qlkhoahochocvien.bussiness.impl.StudentServiceImpl;
 import ra.qlkhoahochocvien.model.Admin;
+import ra.qlkhoahochocvien.model.Course;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class AdminView {
@@ -15,6 +19,7 @@ public class AdminView {
     public static final IAdminService adminService = new AdminServiceImpl();
     public static final IStudentService studentService = new StudentServiceImpl();
     public static final IEnrollService enrollService = new EnrollServiceImpl();
+    public static final ICourseService courseService = new CourseServiceImpl();
     public static void showMenuLogin(Scanner scanner) {
         while (true) {
             System.out.print("Nhập username: ");
@@ -68,7 +73,7 @@ public class AdminView {
                     showEnrollManager(scanner);
                     break;
                 case 4:
-//                    showStatistic();
+                    showStatistic(scanner);
                     break;
                 case 5:
                     System.out.println("Đăng xuất thành công!");
@@ -192,12 +197,36 @@ public class AdminView {
         }
     }
 
-    public static void showStatistic() {
-        System.out.println("1. Thống kê tổng số lượng khoá học và học viên");
-        System.out.println("2. Thống kê học viên theo từng khoá học");
-        System.out.println("3. Top 5 khoá học đông học viên nhất");
-        System.out.println("4. Liệt kê khoá học có trên 10 học viên");
-        System.out.println("5. Quay về menu chính");
+    public static void showStatistic(Scanner scanner) throws Exception {
+        while (true) {
+            System.out.println("============ THỐNG KÊ HỌC VIÊN THEO KHOÁ HỌC ============");
+            System.out.println("1. Thống kê tổng số lượng khoá học và học viên");
+            System.out.println("2. Thống kê học viên theo từng khoá học");
+            System.out.println("3. Top 5 khoá học đông học viên nhất");
+            System.out.println("4. Liệt kê khoá học có trên 10 học viên");
+            System.out.println("5. Quay về menu chính");
+            System.out.print("Nhập lựa chọn của bạn: ");
+            int choice = Integer.parseInt(scanner.nextLine());
+            switch (choice) {
+                case 1:
+                    enrollService.showTotalCoursesAndStudents();
+                    break;
+                case 2:
+                    enrollService.showNumberOfStudentsByCourse();
+                    break;
+                case 3:
+                    enrollService.showTop5CoursesByEnrollment();
+                    break;
+                case 4:
+                    enrollService.showCoursesWithMoreThan10Students();
+                    break;
+                case 5:
+                    return;
+                default:
+                    System.out.println("Lựa chọn không hợp lệ, vui lòng chọn lại");
+                    break;
+            }
+        }
 
     }
 

@@ -116,4 +116,63 @@ public class EnrollServiceImpl implements IEnrollService {
         }
 
     }
+
+    @Override
+    public void showTotalCoursesAndStudents() {
+        List<Enrollment> enrollments = enrollDAO.getEnrollments();
+        long totalCourses = enrollments.stream().map(Enrollment::getCourse_id).distinct().count();
+        long totalStudents = enrollments.stream().map(Enrollment::getStudent_id).distinct().count();
+        System.out.println("Tổng số lượng khoá học: " + totalCourses);
+        System.out.println("Tổng số lượng học viên: " + totalStudents);
+    }
+
+    @Override
+    public void showNumberOfStudentsByCourse() {
+        List<Enrollment> enrollments = enrollDAO.getEnrollments();
+        List<Course> courses = courseService.listCoursesOrderBy("id");
+        List<Student> students = studentService.getStudentsList();
+        for (Course course : courses) {
+            long count = enrollments.stream()
+                    .filter(e -> e.getCourse_id() == course.getId() && e.getStatus() == StatusType.CONFIRM)
+                    .count();
+            System.out.println("Khoá học: " + course.getName() + " (ID: " + course.getId() + ") - Số lượng học viên đã đăng ký: " + count);
+        }
+    }
+
+    @Override
+    public void showTop5CoursesByEnrollment() {
+        List<Enrollment> enrollments = enrollDAO.getEnrollments();
+        List<Course> courses = courseService.listCoursesOrderBy("id");
+        System.out.println("Top 5 khoá học đông học viên nhất:");
+        courses.stream()
+                .sorted((c1, c2) -> Long.compare(
+                        enrollments.stream().filter(e -> e.getCourse_id() == c2.getId() && e.getStatus() == StatusType.CONFIRM).count(),
+                        enrollments.stream().filter(e -> e.getCourse_id() == c1.getId() && e.getStatus() == StatusType.CONFIRM).count()
+                ))
+                .limit(5)
+                .forEach(course -> {
+                    long count = enrollments.stream()
+                            .filter(e -> e.getCourse_id() == course.getId() && e.getStatus() == StatusType.CONFIRM)
+                            .count();
+                    System.out.println("Khoá học: " + course.getName() + " (ID: " + course.getId() + ") - Số lượng học viên đã đăng ký: " + count);
+                });
+    }
+
+    @Override
+    public void showCoursesWithMoreThan10Students() {
+        List<Enrollment> enrollments = enrollDAO.getEnrollments();
+        List<Course> courses = courseService.listCoursesOrderBy("id");
+        System.out.println("Khoá học có trên 10 học viên đã đăng ký:");
+        courses.stream()
+                .filter(course -> enrollments.stream()
+                        .filter(e -> e.getCourse_id() == course.getId() && e.getStatus() == StatusType.CONFIRM)
+                        .count() > 10)
+                .forEach(course -> {
+                    long count = enrollments.stream()
+                            .filter(e -> e.getCourse_id() == course.getId() && e.getStatus() == StatusType.CONFIRM)
+                            .count();
+                    System.out.println("Khoá học: " + course.getName() + " (ID: " + course.getId() + ") - Số lượng học viên đã đăng ký: " + count);
+                });
+    }
+
 }
