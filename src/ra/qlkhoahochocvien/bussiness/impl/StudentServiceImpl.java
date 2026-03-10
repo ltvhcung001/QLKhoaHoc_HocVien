@@ -4,6 +4,7 @@ import ra.qlkhoahochocvien.bussiness.IStudentService;
 import ra.qlkhoahochocvien.dao.IStudentDAO;
 import ra.qlkhoahochocvien.dao.impl.StudentDAOImpl;
 import ra.qlkhoahochocvien.model.Student;
+import ra.qlkhoahochocvien.presentation.StudentView;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -213,6 +214,27 @@ public class StudentServiceImpl implements IStudentService {
     @Override
     public List<Student> getStudentsList() {
         return studentDAO.listStudentsOrderBy("id asc");
+    }
+
+    @Override
+    public void changePassword(Scanner scanner) {
+        System.out.print("Nhập mật khẩu cũ: ");
+        String oldPassword = scanner.nextLine();
+        while (!oldPassword.equals(StudentView.studentLogin.getPassword())) {
+            System.out.println("Mật khẩu cũ vừa nhập không chính xác, vui lòng nhập lại!");
+            System.out.print("Nhập mật khẩu cũ: ");
+            oldPassword = scanner.nextLine();
+        }
+        System.out.print("Nhập mật khẩu mới: ");
+        String newPassword = scanner.nextLine();
+        while (newPassword.equals(StudentView.studentLogin.getPassword())) {
+            System.out.println("Mật khẩu mới trùng với mật khẩu cũ, vui lòng nhập mật khẩu khác");
+            System.out.print("Nhập mật khẩu mới: ");
+            newPassword = scanner.nextLine();
+        }
+        StudentView.studentLogin.setPassword(newPassword);
+        studentDAO.updateStudent(StudentView.studentLogin);
+        System.out.println("Đã đổi mật khẩu thành công!");
     }
 
 }

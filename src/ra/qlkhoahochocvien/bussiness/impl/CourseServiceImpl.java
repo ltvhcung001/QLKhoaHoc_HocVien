@@ -4,6 +4,7 @@ import ra.qlkhoahochocvien.bussiness.ICourseService;
 import ra.qlkhoahochocvien.dao.ICourseDAO;
 import ra.qlkhoahochocvien.dao.impl.CourseDAOImpl;
 import ra.qlkhoahochocvien.model.Course;
+import ra.qlkhoahochocvien.utils.Helper;
 
 import java.util.List;
 
@@ -18,9 +19,7 @@ public class CourseServiceImpl implements ICourseService {
             return;
         }
         System.out.println("Danh sách khoá học:");
-        for (Course course : courses) {
-            System.out.println(course);
-        }
+        Helper.printCourses(courses);
     }
 
 

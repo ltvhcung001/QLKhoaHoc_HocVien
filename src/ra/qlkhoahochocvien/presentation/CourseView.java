@@ -3,6 +3,7 @@ package ra.qlkhoahochocvien.presentation;
 import ra.qlkhoahochocvien.bussiness.ICourseService;
 import ra.qlkhoahochocvien.bussiness.impl.CourseServiceImpl;
 import ra.qlkhoahochocvien.model.Course;
+import ra.qlkhoahochocvien.utils.Helper;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -155,9 +156,7 @@ public class CourseView {
             return;
         }
         System.out.println("Kết quả tìm kiếm: ");
-        for (Course course : courses) {
-            System.out.println(course);
-        }
+        Helper.printCourses(courses);
     }
 
     public static void showCourseInSorted(Scanner scanner) {

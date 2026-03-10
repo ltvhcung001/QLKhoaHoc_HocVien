@@ -16,4 +16,6 @@ public interface IStudentService {
     void getStudents(Scanner scanner) throws  Exception;
     void showStudentInSorted(Scanner scanner);
     List<Student> getStudentsList();
+
+    void changePassword(Scanner scanner);
 }
