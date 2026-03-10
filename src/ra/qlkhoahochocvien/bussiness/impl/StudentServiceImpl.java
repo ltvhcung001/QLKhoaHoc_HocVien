@@ -4,6 +4,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import ra.qlkhoahochocvien.bussiness.IStudentService;
 import ra.qlkhoahochocvien.dao.IStudentDAO;
 import ra.qlkhoahochocvien.dao.impl.StudentDAOImpl;
+import ra.qlkhoahochocvien.model.Course;
 import ra.qlkhoahochocvien.model.Student;
 import ra.qlkhoahochocvien.presentation.StudentView;
 import ra.qlkhoahochocvien.utils.Helper;
@@ -57,25 +58,48 @@ public class StudentServiceImpl implements IStudentService {
         System.out.print("Nhập giới tính (Nam/Nữ): ");
         String genderInput = scanner.nextLine();
         while (!genderInput.equalsIgnoreCase("Nam") && !genderInput.equalsIgnoreCase("Nữ")) {
-            System.out.println("Giới tính không hợp lệ. Vui lòng nhập lại (Nam/Nữ): ");
+            System.out.print("Giới tính không hợp lệ. Vui lòng nhập lại (Nam/Nữ): ");
             genderInput = scanner.nextLine();
         }
         student.setSex(genderInput.equalsIgnoreCase("Nam"));
         System.out.print("Nhập số điện thoại: ");
         student.setPhone(scanner.nextLine());
         System.out.print("Password: ");
-        student.setPassword(scanner.nextLine());
+        String password = scanner.nextLine();
+        while (password.isEmpty()) {
+            System.out.print("Mật khẩu không được để trống, vui lòng nhập lại: ");
+            password = scanner.nextLine();
+        }
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
+        student.setPassword(hashedPassword);
         student.setCreate_at(LocalDate.now());
         studentDAO.addStudent(student);
     }
 
     @Override
     public void updateStudent(Scanner scanner) throws Exception {
+        System.out.println("=======================      CẬP NHẬT THÔNG TIN SINH VIÊN      =======================");
+        List<Student> students = studentDAO.getStudents();
+        Helper.printStudents(students);
         System.out.print("Nhập ID sinh viên cần cập nhật: ");
         int id = Integer.parseInt(scanner.nextLine());
         Student existingStudent = studentDAO.getStudentById(id);
-        if (existingStudent == null) {
+        while (existingStudent == null) {
             System.out.println("Không tìm thấy sinh viên với ID: " + id);
+            System.out.println("Vui lòng nhập lại ID sinh viên cần cập nhật (hoặc -1 để kết thúc): ");
+            try {
+                id = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("ID không hợp lệ, vui lòng nhập lại!");
+                id = -1;
+                continue;
+            }
+            if (id == -1) {
+                System.out.println("Hủy cập nhật sinh viên.");
+                return;
+            }
+            existingStudent = studentDAO.getStudentById(id);
+
         }
         System.out.println("Nhập thông tin mới (để trống nếu không muốn thay đổi):");
         System.out.print("Họ tên (" + existingStudent.getName() + "): ");
@@ -105,23 +129,46 @@ public class StudentServiceImpl implements IStudentService {
         System.out.print("Password (để trống nếu không muốn thay đổi): ");
         String password = scanner.nextLine();
         if (!password.isEmpty()) {
-            existingStudent.setPassword(password);
+            existingStudent.setPassword(BCrypt.hashpw(password, BCrypt.gensalt(12)));
         }
         studentDAO.updateStudent(existingStudent);
     }
 
     @Override
     public void deleteStudent(Scanner scanner) {
-        System.out.print("Nhập ID sinh viên cần xóa: ");
-        int id = Integer.parseInt(scanner.nextLine());
-        System.out.println("Bạn có chắc chắn muốn xóa sinh viên với ID " + id + "? (Y/N)");
-        String confirm = scanner.nextLine();
-        if (!confirm.equalsIgnoreCase("Y")) {
-            System.out.println("Hủy xóa sinh viên.");
-            return;
+        int id;
+        while (true){
+            List<Student> students = studentDAO.getStudents();
+            Helper.printStudents(students);
+            System.out.print("Nhập ID sinh viên cần xóa: ");
+            try {
+                id = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("ID nhập vào không hợp lệ, vui lòng nhập lại!");
+                continue;
+            }
+
+            if (studentDAO.getStudentById(id) == null) {
+                System.out.println("Không tìm thấy sinh viên có ID = " + id + ".");
+                continue;
+            }
+
+            System.out.print("Bạn có chắc chắn muốn xóa sinh viên với ID " + id + "? (Y/N): ");
+            String confirm = scanner.nextLine();
+            while (!confirm.equalsIgnoreCase("Y") && !confirm.equalsIgnoreCase("N")) {
+                System.out.print("Lựa chọn không hợp lệ. Vui lòng nhập lại (Y/N): ");
+                confirm = scanner.nextLine();
+            }
+            if (confirm.equalsIgnoreCase("N")) {
+                System.out.println("Hủy xóa sinh viên.");
+                return;
+            }
+            else  {
+                studentDAO.deleteStudent(id);
+                System.out.println("Đã xóa sinh viên với ID: " + id);
+                return;
+            }
         }
-        studentDAO.deleteStudent(id);
-        System.out.println("Đã xóa sinh viên với ID: " + id);
     }
 
     @Override
@@ -166,49 +213,64 @@ public class StudentServiceImpl implements IStudentService {
 
     @Override
     public void showStudentInSorted(Scanner scanner) {
-        System.out.println("Chọn tiêu chí sắp xếp: ");
-        System.out.println("1. Sắp xếp theo tên");
-        System.out.println("2. Sắp xếp theo email");
-        System.out.println("3. Sắp xếp theo ID");
-        System.out.print("Nhập lựa chọn: ");
-        int choice = Integer.parseInt(scanner.nextLine());
-        System.out.println("Chọn thứ tự sắp xếp");
-        System.out.println("1. Tăng dần");
-        System.out.println("2. Giảm dần");
-        System.out.print("Nhập lựa chọn: ");
-        int orderChoice = Integer.parseInt(scanner.nextLine());
-        String orderBy;
-        switch (choice) {
-            case 1:
-                if (orderChoice == 1) {
-                    orderBy = "name asc";
-                } else {
-                    orderBy = "name desc";
-                }
-                break;
-            case 2:
-                if (orderChoice == 1) {
-                    orderBy = "email asc";
-                } else {
-                    orderBy = "email desc";
-                }
-                break;
-            case 3:
-                if (orderChoice == 1) {
-                    orderBy = "id asc";
-                } else {
-                    orderBy = "id desc";
-                }
-                break;
-            default:
-                System.out.println("Lựa chọn không hợp lệ, quay lại menu chính.");
-                return;
+        while (true) {
+            System.out.println("Chọn tiêu chí sắp xếp: ");
+            System.out.println("1. Sắp xếp theo tên");
+            System.out.println("2. Sắp xếp theo email");
+            System.out.println("3. Sắp xếp theo ID");
+            System.out.print("Nhập lựa chọn: ");
+            int choice;
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Lựa chọn không hợp lệ, vui lòng chọn lại.");
+                continue;
+            }
+            System.out.println("Chọn thứ tự sắp xếp");
+            System.out.println("1. Tăng dần");
+            System.out.println("2. Giảm dần");
+            System.out.print("Nhập lựa chọn: ");
+            int orderChoice = Integer.parseInt(scanner.nextLine());
+            try {
+                orderChoice = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Lựa chọn không hợp lệ, vui lòng chọn lại.");
+                continue;
+            }
+            String orderBy;
+            switch (choice) {
+                case 1:
+                    if (orderChoice == 1) {
+                        orderBy = "name asc";
+                    } else {
+                        orderBy = "name desc";
+                    }
+                    break;
+                case 2:
+                    if (orderChoice == 1) {
+                        orderBy = "email asc";
+                    } else {
+                        orderBy = "email desc";
+                    }
+                    break;
+                case 3:
+                    if (orderChoice == 1) {
+                        orderBy = "id asc";
+                    } else {
+                        orderBy = "id desc";
+                    }
+                    break;
+                default:
+                    System.out.println("Lựa chọn không hợp lệ, quay lại menu chính.");
+                    return;
+            }
+            List<Student> sortedStudents = studentDAO.listStudentsOrderBy(orderBy);
+            System.out.println("Danh sách sinh viên sau khi sắp xếp: ");
+            for (Student student : sortedStudents) {
+                System.out.println(student);
+            }
         }
-        List<Student> sortedStudents = studentDAO.listStudentsOrderBy(orderBy);
-        System.out.println("Danh sách sinh viên sau khi sắp xếp: ");
-        for (Student student : sortedStudents) {
-            System.out.println(student);
-        }
+
     }
 
     @Override

@@ -10,6 +10,8 @@ public interface ICourseService {
     public void addCouse(Course course);
     public void updateCourse(Course course);
     public void deleteCourse(int id);
-    public List<Course> getCourseByName(String name);
-    public List<Course> listCoursesOrderBy(String orderBy);
+    public void getCourseByName(String name);
+    public List<Course> listFullCoursesOrderBy(String orderBy);
+    public void listCoursesOrderBy(String orderBy);
+    List<Course> getListCourses();
 }

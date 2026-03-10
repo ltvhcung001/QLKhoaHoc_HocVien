@@ -25,7 +25,7 @@ public class EnrollServiceImpl implements IEnrollService {
     @Override
     public void showEnrollByCourse() {
         List<Enrollment> enrollments = enrollDAO.getEnrollments();
-        List<Course> courses = courseService.listCoursesOrderBy("id");
+        List<Course> courses = courseService.listFullCoursesOrderBy("id");
         List<Student> students = studentService.getStudentsList();
 //        for (Course course : courses) {
 //            AtomicInteger index = new AtomicInteger(1);
@@ -66,7 +66,7 @@ public class EnrollServiceImpl implements IEnrollService {
     @Override
     public List<Course> getCoursesCanEnroll(int studentId) {
         List<Enrollment> enrollments = enrollDAO.getEnrollments();
-        List<Course> courses = courseService.listCoursesOrderBy("id");
+        List<Course> courses = courseService.listFullCoursesOrderBy("id");
         List<Course> enrolledCourses = enrollments.stream()
                 .filter(e -> e.getStudent_id() == studentId)
                 .map(e -> courses.stream().filter(c -> c.getId() == e.getCourse_id()).findFirst().orElse(null))
@@ -168,7 +168,7 @@ public class EnrollServiceImpl implements IEnrollService {
     @Override
     public void showNumberOfStudentsByCourse() {
         List<Enrollment> enrollments = enrollDAO.getEnrollments();
-        List<Course> courses = courseService.listCoursesOrderBy("id");
+        List<Course> courses = courseService.listFullCoursesOrderBy("id");
         List<Student> students = studentService.getStudentsList();
         for (Course course : courses) {
             long count = enrollments.stream()
@@ -181,7 +181,7 @@ public class EnrollServiceImpl implements IEnrollService {
     @Override
     public void showTop5CoursesByEnrollment() {
         List<Enrollment> enrollments = enrollDAO.getEnrollments();
-        List<Course> courses = courseService.listCoursesOrderBy("id");
+        List<Course> courses = courseService.listFullCoursesOrderBy("id");
         System.out.println("Top 5 khoá học đông học viên nhất:");
         courses.stream()
                 .sorted((c1, c2) -> Long.compare(
@@ -200,7 +200,7 @@ public class EnrollServiceImpl implements IEnrollService {
     @Override
     public void showCoursesWithMoreThan10Students() {
         List<Enrollment> enrollments = enrollDAO.getEnrollments();
-        List<Course> courses = courseService.listCoursesOrderBy("id");
+        List<Course> courses = courseService.listFullCoursesOrderBy("id");
         System.out.println("Khoá học có trên 10 học viên đã đăng ký:");
         courses.stream()
                 .filter(course -> enrollments.stream()
@@ -217,7 +217,7 @@ public class EnrollServiceImpl implements IEnrollService {
     @Override
     public List<Course> listEnrolledCoursesByStudentID(int studentId){
         List<Enrollment> enrollments = enrollDAO.getEnrollments();
-        List<Course> courses = courseService.listCoursesOrderBy("id");
+        List<Course> courses = courseService.listFullCoursesOrderBy("id");
         List<Enrollment> studentEnrollments = enrollments.stream()
                 .filter(e -> e.getStudent_id() == studentId)
                 .toList();
@@ -239,7 +239,7 @@ public class EnrollServiceImpl implements IEnrollService {
     @Override
     public void listEnrolledCoursesByStudent(int id) {
         List<Enrollment> enrollments = enrollDAO.getEnrollments();
-        List<Course> courses = courseService.listCoursesOrderBy("id");
+        List<Course> courses = courseService.listFullCoursesOrderBy("id");
         List<Enrollment> studentEnrollments = enrollments.stream()
                 .filter(e -> e.getStudent_id() == id)
                 .toList();

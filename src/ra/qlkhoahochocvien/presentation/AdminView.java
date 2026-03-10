@@ -9,9 +9,7 @@ import ra.qlkhoahochocvien.bussiness.impl.CourseServiceImpl;
 import ra.qlkhoahochocvien.bussiness.impl.EnrollServiceImpl;
 import ra.qlkhoahochocvien.bussiness.impl.StudentServiceImpl;
 import ra.qlkhoahochocvien.model.Admin;
-import ra.qlkhoahochocvien.model.Course;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class AdminView {
@@ -54,14 +52,21 @@ public class AdminView {
 
     public static void showMainMenu(Scanner scanner) throws Exception {
         while (true) {
-            System.out.println("============ MENU ADMIN ============");
-            System.out.println("1. Quản lý khoá học");
-            System.out.println("2. Quản lý học viên");
-            System.out.println("3. Quản lý đăng ký học");
-            System.out.println("4. Thống kê học viên theo khoá học");
-            System.out.println("5. Đăng xuất");
+            System.out.println("┌─────────────────     MENU ADMIN     ─────────────────┐");
+            System.out.println("│ 1. Quản lý khoá học                                  │");
+            System.out.println("│ 2. Quản lý học viên                                  │");
+            System.out.println("│ 3. Quản lý đăng ký học                               │");
+            System.out.println("│ 4. Thống kê học viên theo khoá học                   │");
+            System.out.println("│ 5. Đăng xuất                                         │");
+            System.out.println("└──────────────────────────────────────────────────────┘");
             System.out.print("Nhập lựa chọn của bạn: ");
-            int choice = Integer.parseInt(scanner.nextLine());
+            int choice;
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Lựa chọn không hợp lệ, vui lòng nhập lại!");
+                continue;
+            }
             switch (choice) {
                 case 1:
                     showCourseManaer(scanner);
@@ -87,16 +92,23 @@ public class AdminView {
 
     public static void showCourseManaer(Scanner scanner) {
         while (true) {
-            System.out.println("============ QUẢN LÝ KHOÁ HỌC ============");
-            System.out.println("1. Hiển thị danh sách khoá học");
-            System.out.println("2. Thêm khoá học mới");
-            System.out.println("3. Chỉnh sửa thông tin khoá học (hiển thị menu chọn thuộc tính cần sửa)");
-            System.out.println("4. Xoá khoá học (xác nhận trước khi xoá)");
-            System.out.println("5. Tìm kiếm theo tên (tương đối)");
-            System.out.println("6. Sắp xếp theo tên hoặc id (tăng/giảm dần)");
-            System.out.println("7. Quay về menu chính");
+            System.out.println("┌───────────────────────────      QUẢN LÝ KHOÁ HỌC     ───────────────────────────┐");
+            System.out.println("│ 1. Hiển thị danh sách khoá học                                                  │");
+            System.out.println("│ 2. Thêm khoá học mới                                                            │");
+            System.out.println("│ 3. Chỉnh sửa thông tin khoá học (hiển thị menu chọn thuộc tính cần sửa)         │");
+            System.out.println("│ 4. Xoá khoá học (xác nhận trước khi xoá)                                        │");
+            System.out.println("│ 5. Tìm kiếm theo tên (tương đối)                                                │");
+            System.out.println("│ 6. Sắp xếp theo tên hoặc id (tăng/giảm dần)                                     │");
+            System.out.println("│ 7. Quay về menu chính                                                           │");
+            System.out.println("└─────────────────────────────────────────────────────────────────────────────────┘");
             System.out.print("Nhập lựa chọn của bạn: ");
-            int choice = Integer.parseInt(scanner.nextLine());
+            int choice;
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Lựa chọn không hợp lệ, vui lòng nhập lại!");
+                continue;
+            }
             switch (choice) {
                 case 1:
                     CourseView.showCourseList();
@@ -111,7 +123,7 @@ public class AdminView {
                     CourseView.deleteCourse(scanner);
                     break;
                 case 5:
-                    CourseView.getCourseByName(scanner);
+                    CourseView.findCourseByName(scanner);
                     break;
                 case 6:
                     CourseView.showCourseInSorted(scanner);
@@ -119,7 +131,7 @@ public class AdminView {
                 case 7:
                     return;
                 default:
-                    System.out.println("Lua chon khong hop le, vui long chon lai.");
+                    System.out.println("Lựa chọn không hợp lệ, vui lòng nhập lại!");
                     break;
             }
         }
@@ -127,16 +139,23 @@ public class AdminView {
 
     public static void showStudentManager(Scanner scanner) throws Exception {
         while(true) {
-            System.out.println("============ QUẢN LÝ HỌC VIÊN ============");
-            System.out.println("1. Hiển thị danh sách học viên");
-            System.out.println("2. Thêm mới học viên");
-            System.out.println("3. Chỉnh sửa thông tin học viên (hiển thị menu chọn thuộc tính cần sửa)");
-            System.out.println("4. Xoá học viên");
-            System.out.println("5. Tìm kiếm theo tên, email hoặc id (tương đối)");
-            System.out.println("6. Sắp xếp theo tên hoặc id (tăng/giảm dần)");
-            System.out.println("7. Quay về menu chính");
+            System.out.println("┌─────────────────────         QUẢN LÝ HỌC VIÊN         ─────────────────────┐");
+            System.out.println("│ 1. Hiển thị danh sách học viên                                             │");
+            System.out.println("│ 2. Thêm mới học viên                                                       │");
+            System.out.println("│ 3. Chỉnh sửa thông tin học viên (hiển thị menu chọn thuộc tính cần sửa)    │");
+            System.out.println("│ 4. Xoá học viên                                                            │");
+            System.out.println("│ 5. Tìm kiếm theo tên, email hoặc id (tương đối)                            │");
+            System.out.println("│ 6. Sắp xếp theo tên hoặc id (tăng/giảm dần)                                │");
+            System.out.println("│ 7. Quay về menu chính                                                      │");
+            System.out.println("└────────────────────────────────────────────────────────────────────────────┘");
             System.out.print("Nhập lựa chọn của bạn: ");
-            int choice = Integer.parseInt(scanner.nextLine());
+            int choice;
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Lựa chọn không hợp lệ, vui lòng nhập lại!");
+                continue;
+            }
             switch (choice) {
                 case 1:
                     studentService.showStudents();
@@ -167,14 +186,21 @@ public class AdminView {
 
     public static void showEnrollManager(Scanner scanner) throws Exception {
         while (true) {
-            System.out.println("============ QUẢN LÝ ĐĂNG KÝ HỌC ============");
-            System.out.println("1. Hiển thị học viên theo từng khoá học");
-            System.out.println("2. Thêm học viên vào khoá học");
-            System.out.println("3. Xoá học viên khỏi khoá học");
-            System.out.println("4. Duyệt đăng ký học (chấp nhận hoặc từ chối đăng ký của học viên)");
-            System.out.println("5. Quay về menu chính");
+            System.out.println("┌────────────────────      QUẢN LÝ ĐĂNG KÝ HỌC      ────────────────────┐");
+            System.out.println("│ 1. Hiển thị học viên theo từng khoá học                               │");
+            System.out.println("│ 2. Thêm học viên vào khoá học                                         │");
+            System.out.println("│ 3. Xoá học viên khỏi khoá học                                         │");
+            System.out.println("│ 4. Duyệt đăng ký học (chấp nhận hoặc từ chối đăng ký của học viên     │");
+            System.out.println("│ 5. Quay về menu chính                                                 │");
+            System.out.println("└───────────────────────────────────────────────────────────────────────┘");
             System.out.print("Nhập lựa chọn của bạn: ");
-            int choice = Integer.parseInt(new Scanner(System.in).nextLine());
+            int choice;
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+            }catch (NumberFormatException e) {
+                System.out.println("Lựa chọn không hợp lệ, vui lòng nhập lại!");
+                continue;
+            }
             switch (choice) {
                 case 1:
                     enrollService.showEnrollByCourse();
@@ -199,14 +225,21 @@ public class AdminView {
 
     public static void showStatistic(Scanner scanner) throws Exception {
         while (true) {
-            System.out.println("============ THỐNG KÊ HỌC VIÊN THEO KHOÁ HỌC ============");
-            System.out.println("1. Thống kê tổng số lượng khoá học và học viên");
-            System.out.println("2. Thống kê học viên theo từng khoá học");
-            System.out.println("3. Top 5 khoá học đông học viên nhất");
-            System.out.println("4. Liệt kê khoá học có trên 10 học viên");
-            System.out.println("5. Quay về menu chính");
+            System.out.println("┌────────────────    THỐNG KÊ HỌC VIÊN THEO KHOÁ HỌC   ─────────────────┐");
+            System.out.println("│ 1. Thống kê tổng số lượng khoá học và học viên                        │");
+            System.out.println("│ 2. Thống kê học viên theo từng khoá học                               │");
+            System.out.println("│ 3. Top 5 khoá học đông học viên nhất                                  │");
+            System.out.println("│ 4. Liệt kê khoá học có trên 10 học viên                               │");
+            System.out.println("│ 5. Quay về menu chính                                                 │");
+            System.out.println("└───────────────────────────────────────────────────────────────────────┘");
             System.out.print("Nhập lựa chọn của bạn: ");
-            int choice = Integer.parseInt(scanner.nextLine());
+            int choice;
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+            }catch (NumberFormatException e) {
+                System.out.println("Lựa chọn không hợp lệ, vui lòng nhập lại!");
+                continue;
+            }
             switch (choice) {
                 case 1:
                     enrollService.showTotalCoursesAndStudents();

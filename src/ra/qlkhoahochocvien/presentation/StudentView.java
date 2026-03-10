@@ -61,7 +61,7 @@ public class StudentView {
                     CourseView.showCourseList();
                     break;
                 case 2:
-                    CourseView.getCourseByName(scanner);
+                    CourseView.findCourseByName(scanner);
                     break;
                 case 3:
                     enrollService.addEnrollByStudent(scanner);
