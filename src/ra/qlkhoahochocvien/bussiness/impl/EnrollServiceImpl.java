@@ -215,6 +215,28 @@ public class EnrollServiceImpl implements IEnrollService {
     }
 
     @Override
+    public List<Course> listEnrolledCoursesByStudentID(int studentId){
+        List<Enrollment> enrollments = enrollDAO.getEnrollments();
+        List<Course> courses = courseService.listCoursesOrderBy("id");
+        List<Enrollment> studentEnrollments = enrollments.stream()
+                .filter(e -> e.getStudent_id() == studentId)
+                .toList();
+        if (studentEnrollments.isEmpty()) {
+            System.out.println("Bạn chưa đăng ký khoá học nào.");
+            return new ArrayList<>();
+        }
+        List<Course> result = new ArrayList<>();
+        studentEnrollments.forEach(e -> {
+            Course course = courses.stream().filter(c -> c.getId() == e.getCourse_id()).findFirst().orElse(null);
+            if (course != null) {
+                result.add(course);
+            }
+        }
+        );
+        return result;
+    }
+
+    @Override
     public void listEnrolledCoursesByStudent(int id) {
         List<Enrollment> enrollments = enrollDAO.getEnrollments();
         List<Course> courses = courseService.listCoursesOrderBy("id");
@@ -282,15 +304,17 @@ public class EnrollServiceImpl implements IEnrollService {
 
     @Override
     public void deleteEnrollByStudent(Scanner scanner) {
-        List<Course> courses = listEnrolledCoursesByStudent(StudentView.studentLogin.getId());
+        List<Course> courses = listEnrolledCoursesByStudentID(StudentView.studentLogin.getId());
         System.out.println("=== DANH SÁCH KHOÁ HỌC ĐÃ ĐĂNG KÝ ===");
         Helper.printCourses(courses);
         System.out.println("Nhập ID khoá học bạn muốn huỷ đăng ký: ");
-        int courseId = Integer.parseInt(scanner.nextLine());
-        while(courses.stream().noneMatch(c -> c.getId() == courseId)) {;
+        var ref = new Object() {
+            int courseId = Integer.parseInt(scanner.nextLine());
+        };
+        while(courses.stream().noneMatch(c -> c.getId() == ref.courseId)) {;
             System.out.println("ID khoá học không hợp lệ hoặc bạn chưa đăng ký khoá học này, vui lòng chọn lại!");
             System.out.println("Nhập ID khoá học bạn muốn huỷ đăng ký: ");
-            courseId = Integer.parseInt(scanner.nextLine());
+            ref.courseId = Integer.parseInt(scanner.nextLine());
         }
         System.out.println("Bạn có chắc chắn muốn huỷ đăng ký khoá học này? (y/n): ");
         String confirm = scanner.nextLine().trim().toLowerCase();
@@ -298,7 +322,7 @@ public class EnrollServiceImpl implements IEnrollService {
             System.out.println("Đã huỷ bỏ việc huỷ đăng ký khoá học.");
             return;
         }
-        enrollDAO.deleteEnrollment(StudentView.studentLogin.getId(), courseId);
+        enrollDAO.deleteEnrollment(StudentView.studentLogin.getId(), ref.courseId);
         System.out.println("Huỷ đăng ký khoá học thành công!");
     }
 

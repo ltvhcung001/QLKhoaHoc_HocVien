@@ -22,6 +22,8 @@ public interface IEnrollService {
     void showTop5CoursesByEnrollment();
     void showCoursesWithMoreThan10Students();
 
+    List<Course> listEnrolledCoursesByStudentID(int studentId);
+
     void listEnrolledCoursesByStudent(int id);
 
     void deleteEnrollByStudent(Scanner scanner);
