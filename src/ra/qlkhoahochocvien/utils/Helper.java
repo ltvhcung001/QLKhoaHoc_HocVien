@@ -1,5 +1,6 @@
 package ra.qlkhoahochocvien.utils;
 
+import org.mindrot.jbcrypt.BCrypt;
 import ra.qlkhoahochocvien.model.Course;
 import ra.qlkhoahochocvien.model.Enrollment;
 import ra.qlkhoahochocvien.model.StatusType;
@@ -51,7 +52,7 @@ public class Helper {
                     s.getEmail(),
                     s.getSex()? "Male":"Female",
                     s.getPhone(),
-                    s.getPassword(),
+                    s.getPassword().length() > 10 ? s.getPassword().substring(0, 10) + "..." : s.getPassword(),
                     s.getCreate_at());
         }
         System.out.println("└──────┴────────────────────┴────────────────────┴────────────────────┴──────────┴───────────────┴────────────────────┴────────────────────┘");
@@ -121,25 +122,27 @@ public class Helper {
     }
 
     public static void main(String[] args) {
-        List<Course> courses = List.of(
-                new Course(1, "Java", 30, "Nguyen Van A", java.time.LocalDate.now()),
-                new Course(2, "Python", 25, "Le Thi B", java.time.LocalDate.now()),
-                new Course(3, "C++", 20, "Tran Van C", java.time.LocalDate.now())
-        );
-        printCourses(courses);
-        List<Student> students = List.of(
-                new Student(1, "Nguyen Van A", java.time.LocalDate.of(2000, 1, 1), "nva@gmail.com", true, "0123456789", "password", LocalDate.now()),
-                new Student(2, "Le Thi B", java.time.LocalDate.of(2001, 2, 2), "ltb@gmail.com", false, "0987654321", "password", LocalDate.now()),
-                new Student(3, "Tran Van C", java.time.LocalDate.of(2002, 3, 3), "tvanc@gmail.com", true, "0123456789", "password", LocalDate.now()));
-        printStudents(students);
-        List<Enrollment> enrollments = List.of(
-                new Enrollment(1, 1, 1, java.time.LocalDateTime.now(), StatusType.CONFIRM),
-                new Enrollment(2, 1, 3, java.time.LocalDateTime.now(), StatusType.CANCEL),
-                new Enrollment(3, 3, 2, java.time.LocalDateTime.now(), StatusType.WAITING),
-                new Enrollment(4, 1, 2, java.time.LocalDateTime.now(), StatusType.CONFIRM),
-                new Enrollment(5, 1, 3, java.time.LocalDateTime.now(), StatusType.CANCEL),
-                new Enrollment(6, 3, 1, java.time.LocalDateTime.now(), StatusType.WAITING)
-        );
-        printEnrollmentsByStudents(enrollments, courses, 3);
+//        List<Course> courses = List.of(
+//                new Course(1, "Java", 30, "Nguyen Van A", java.time.LocalDate.now()),
+//                new Course(2, "Python", 25, "Le Thi B", java.time.LocalDate.now()),
+//                new Course(3, "C++", 20, "Tran Van C", java.time.LocalDate.now())
+//        );
+//        printCourses(courses);
+//        List<Student> students = List.of(
+//                new Student(1, "Nguyen Van A", java.time.LocalDate.of(2000, 1, 1), "nva@gmail.com", true, "0123456789", "password", LocalDate.now()),
+//                new Student(2, "Le Thi B", java.time.LocalDate.of(2001, 2, 2), "ltb@gmail.com", false, "0987654321", "password", LocalDate.now()),
+//                new Student(3, "Tran Van C", java.time.LocalDate.of(2002, 3, 3), "tvanc@gmail.com", true, "0123456789", "password", LocalDate.now()));
+//        printStudents(students);
+//        List<Enrollment> enrollments = List.of(
+//                new Enrollment(1, 1, 1, java.time.LocalDateTime.now(), StatusType.CONFIRM),
+//                new Enrollment(2, 1, 3, java.time.LocalDateTime.now(), StatusType.CANCEL),
+//                new Enrollment(3, 3, 2, java.time.LocalDateTime.now(), StatusType.WAITING),
+//                new Enrollment(4, 1, 2, java.time.LocalDateTime.now(), StatusType.CONFIRM),
+//                new Enrollment(5, 1, 3, java.time.LocalDateTime.now(), StatusType.CANCEL),
+//                new Enrollment(6, 3, 1, java.time.LocalDateTime.now(), StatusType.WAITING)
+//        );
+//        printEnrollmentsByStudents(enrollments, courses, 3);
+        String password = "123";
+        System.out.println(BCrypt.hashpw(password, BCrypt.gensalt(12)));
     }
 }

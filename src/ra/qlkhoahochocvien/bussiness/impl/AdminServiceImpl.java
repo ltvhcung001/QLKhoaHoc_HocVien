@@ -1,5 +1,6 @@
 package ra.qlkhoahochocvien.bussiness.impl;
 
+import org.mindrot.jbcrypt.BCrypt;
 import ra.qlkhoahochocvien.bussiness.IAdminService;
 import ra.qlkhoahochocvien.dao.IAdminDAO;
 import ra.qlkhoahochocvien.dao.impl.AdminDAOImpl;
@@ -11,9 +12,12 @@ public class AdminServiceImpl implements IAdminService {
     @Override
     public Admin login(String username, String password) {
         Admin admin = adminDAO.findAdminByUsername(username);
-        if (admin != null)
-            if (admin.getPassword().equals(password))
+
+
+        if (admin != null){
+            if(BCrypt.checkpw(password, admin.getPassword()))
                 return admin;
+        }
 
         return null;
     }

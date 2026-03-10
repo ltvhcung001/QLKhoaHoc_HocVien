@@ -23,9 +23,9 @@ public class Main {
                     AdminView.showMainMenu(scanner);
                     break;
                 case 2:
-                    StudentView studentView = new StudentView();
-                    studentView.showMenuLogin(scanner);
-                    studentView.showMainMenu(scanner);
+//                    StudentView studentView = new StudentView();
+                    StudentView.showMenuLogin(scanner);
+                    StudentView.showMainMenu(scanner);
                     break;
                 case 3:
                     System.out.println("Đang thoát chương trình!");

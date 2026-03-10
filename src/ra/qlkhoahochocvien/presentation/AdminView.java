@@ -23,23 +23,23 @@ public class AdminView {
     public static void showMenuLogin(Scanner scanner) {
         while (true) {
             System.out.print("Nhập username: ");
-            String email = scanner.nextLine();
-            while(email == ""){
+            String username = scanner.nextLine();
+            while(username.isEmpty()){
                 System.out.println("Dữ liệu nhập vào không hợp lệ (không được rỗng), vui lòng nhập lại!");
                 System.out.print("Nhập username: ");
-                email = scanner.nextLine();
+                username = scanner.nextLine();
             }
 
             System.out.print("Nhập password: ");
             String password = scanner.nextLine();
 
-            while (password == ""){
+            while (password.isEmpty()){
                 System.out.println("Dữ liệu nhập vào không hợp lệ (không được rỗng), vui lòng nhập lại!");
                 System.out.print("Nhập password: ");
                 password = scanner.nextLine();
             }
 
-            Admin ad = adminService.login(email, password);
+            Admin ad = adminService.login(username, password);
             if (ad != null) {
                 System.out.println("Đăng nhập thành công!");
                 userAdmin = ad;

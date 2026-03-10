@@ -1,10 +1,12 @@
 package ra.qlkhoahochocvien.bussiness.impl;
 
+import org.mindrot.jbcrypt.BCrypt;
 import ra.qlkhoahochocvien.bussiness.IStudentService;
 import ra.qlkhoahochocvien.dao.IStudentDAO;
 import ra.qlkhoahochocvien.dao.impl.StudentDAOImpl;
 import ra.qlkhoahochocvien.model.Student;
 import ra.qlkhoahochocvien.presentation.StudentView;
+import ra.qlkhoahochocvien.utils.Helper;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ public class StudentServiceImpl implements IStudentService {
     public Student login(String email, String password) {
         Student student = studentDAO.findStudentByEmail(email);
         if (student != null)
-            if (student.getPassword().equals(password))
+            if (BCrypt.checkpw(password, student.getPassword()))
                 return student;
 
         return null;
@@ -32,9 +34,7 @@ public class StudentServiceImpl implements IStudentService {
             return;
         }
         System.out.println("Danh sách sinh viên:");
-        for (Student student : students) {
-            System.out.println(student);
-        }
+        Helper.printStudents(students);
     }
 
     @Override
@@ -220,19 +220,20 @@ public class StudentServiceImpl implements IStudentService {
     public void changePassword(Scanner scanner) {
         System.out.print("Nhập mật khẩu cũ: ");
         String oldPassword = scanner.nextLine();
-        while (!oldPassword.equals(StudentView.studentLogin.getPassword())) {
+        while (!BCrypt.checkpw(oldPassword, StudentView.studentLogin.getPassword())) {
             System.out.println("Mật khẩu cũ vừa nhập không chính xác, vui lòng nhập lại!");
             System.out.print("Nhập mật khẩu cũ: ");
             oldPassword = scanner.nextLine();
         }
         System.out.print("Nhập mật khẩu mới: ");
         String newPassword = scanner.nextLine();
-        while (newPassword.equals(StudentView.studentLogin.getPassword())) {
+        while (BCrypt.checkpw(newPassword, StudentView.studentLogin.getPassword())) {
             System.out.println("Mật khẩu mới trùng với mật khẩu cũ, vui lòng nhập mật khẩu khác");
             System.out.print("Nhập mật khẩu mới: ");
             newPassword = scanner.nextLine();
         }
-        StudentView.studentLogin.setPassword(newPassword);
+        String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt(12));
+        StudentView.studentLogin.setPassword(hashedPassword);
         studentDAO.updateStudent(StudentView.studentLogin);
         System.out.println("Đã đổi mật khẩu thành công!");
     }
