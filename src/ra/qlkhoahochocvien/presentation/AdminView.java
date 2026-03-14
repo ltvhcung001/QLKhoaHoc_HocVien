@@ -9,6 +9,7 @@ import ra.qlkhoahochocvien.bussiness.impl.CourseServiceImpl;
 import ra.qlkhoahochocvien.bussiness.impl.EnrollServiceImpl;
 import ra.qlkhoahochocvien.bussiness.impl.StudentServiceImpl;
 import ra.qlkhoahochocvien.model.Admin;
+import ra.qlkhoahochocvien.utils.Helper;
 
 import java.util.Scanner;
 
@@ -18,7 +19,7 @@ public class AdminView {
     public static final IStudentService studentService = new StudentServiceImpl();
     public static final IEnrollService enrollService = new EnrollServiceImpl();
     public static final ICourseService courseService = new CourseServiceImpl();
-    public static void showMenuLogin(Scanner scanner) {
+    public static void showMenuLogin(Scanner scanner) throws Exception{
         while (true) {
             System.out.print("Nhập username: ");
             String username = scanner.nextLine();
@@ -41,10 +42,12 @@ public class AdminView {
             if (ad != null) {
                 System.out.println("Đăng nhập thành công!");
                 userAdmin = ad;
+                showMainMenu(scanner);
                 break;
             }
             else{
                 System.out.println("Đăng nhập thất bại, email hoặc password không đúng, hãy thử lại!");
+                break;
             }
         }
 
@@ -60,13 +63,7 @@ public class AdminView {
             System.out.println("│ 5. Đăng xuất                                         │");
             System.out.println("└──────────────────────────────────────────────────────┘");
             System.out.print("Nhập lựa chọn của bạn: ");
-            int choice;
-            try {
-                choice = Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Lựa chọn không hợp lệ, vui lòng nhập lại!");
-                continue;
-            }
+            int choice = Helper.getIntInput(scanner, "Nhập lựa chọn của bạn: ");
             switch (choice) {
                 case 1:
                     showCourseManaer(scanner);
@@ -82,6 +79,7 @@ public class AdminView {
                     break;
                 case 5:
                     System.out.println("Đăng xuất thành công!");
+                    userAdmin = null;
                     return;
                 default:
                     System.out.println("Lựa chọn không hợp lệ, vui lòng chọn lại");
@@ -101,17 +99,10 @@ public class AdminView {
             System.out.println("│ 6. Sắp xếp theo tên hoặc id (tăng/giảm dần)                                     │");
             System.out.println("│ 7. Quay về menu chính                                                           │");
             System.out.println("└─────────────────────────────────────────────────────────────────────────────────┘");
-            System.out.print("Nhập lựa chọn của bạn: ");
-            int choice;
-            try {
-                choice = Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Lựa chọn không hợp lệ, vui lòng nhập lại!");
-                continue;
-            }
+            int choice = Helper.getIntInput(scanner, "Nhập lựa chọn của bạn: ");
             switch (choice) {
                 case 1:
-                    CourseView.showCourseList();
+                    CourseView.showCourseList(scanner);
                     break;
                 case 2:
                     CourseView.addNewCourse(scanner);
@@ -148,17 +139,10 @@ public class AdminView {
             System.out.println("│ 6. Sắp xếp theo tên hoặc id (tăng/giảm dần)                                │");
             System.out.println("│ 7. Quay về menu chính                                                      │");
             System.out.println("└────────────────────────────────────────────────────────────────────────────┘");
-            System.out.print("Nhập lựa chọn của bạn: ");
-            int choice;
-            try {
-                choice = Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Lựa chọn không hợp lệ, vui lòng nhập lại!");
-                continue;
-            }
+            int choice = Helper.getIntInput(scanner, "Nhập lựa chọn của bạn: ");
             switch (choice) {
                 case 1:
-                    studentService.showStudents();
+                    studentService.showStudents(scanner);
                     break;
                 case 2:
                     studentService.addStudent(scanner);
@@ -190,23 +174,16 @@ public class AdminView {
             System.out.println("│ 1. Hiển thị học viên theo từng khoá học                               │");
             System.out.println("│ 2. Thêm học viên vào khoá học                                         │");
             System.out.println("│ 3. Xoá học viên khỏi khoá học                                         │");
-            System.out.println("│ 4. Duyệt đăng ký học (chấp nhận hoặc từ chối đăng ký của học viên     │");
+            System.out.println("│ 4. Duyệt đăng ký học (chấp nhận hoặc từ chối đăng ký của học viên)    │");
             System.out.println("│ 5. Quay về menu chính                                                 │");
             System.out.println("└───────────────────────────────────────────────────────────────────────┘");
-            System.out.print("Nhập lựa chọn của bạn: ");
-            int choice;
-            try {
-                choice = Integer.parseInt(scanner.nextLine());
-            }catch (NumberFormatException e) {
-                System.out.println("Lựa chọn không hợp lệ, vui lòng nhập lại!");
-                continue;
-            }
+            int choice = Helper.getIntInput(scanner, "Nhập lựa chọn của bạn: ");
             switch (choice) {
                 case 1:
-                    enrollService.showEnrollByCourse();
+                    enrollService.showEnrollByCourse(scanner);
                     break;
                 case 2:
-                    enrollService.addEnroll(scanner);
+                    enrollService.addEnrollByAdmin(scanner);
                     break;
                 case 3:
                     enrollService.deleteEnroll(scanner);
@@ -232,14 +209,7 @@ public class AdminView {
             System.out.println("│ 4. Liệt kê khoá học có trên 10 học viên                               │");
             System.out.println("│ 5. Quay về menu chính                                                 │");
             System.out.println("└───────────────────────────────────────────────────────────────────────┘");
-            System.out.print("Nhập lựa chọn của bạn: ");
-            int choice;
-            try {
-                choice = Integer.parseInt(scanner.nextLine());
-            }catch (NumberFormatException e) {
-                System.out.println("Lựa chọn không hợp lệ, vui lòng nhập lại!");
-                continue;
-            }
+            int choice = Helper.getIntInput(scanner, "Nhập lựa chọn của bạn: ");
             switch (choice) {
                 case 1:
                     enrollService.showTotalCoursesAndStudents();

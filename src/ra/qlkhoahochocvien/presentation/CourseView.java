@@ -12,8 +12,8 @@ import java.util.Scanner;
 public class CourseView {
     private static final ICourseService courseService = new CourseServiceImpl();
 
-    public static void showCourseList() {
-        courseService.listCourses();
+    public static void showCourseList(Scanner scanner) {
+        courseService.listCourses(scanner);
     }
 
     public static void addNewCourse(Scanner scanner) {
@@ -29,17 +29,12 @@ public class CourseView {
 
         int duration;
         while (true) {
-            System.out.print("Nhập thời lượng (số giờ): ");
-            try {
-                duration = Integer.parseInt(scanner.nextLine().trim());
-                if (duration <= 0) {
-                    System.out.println("Thời lượng của khoá học phải lớn hơn 0.");
-                    continue;
-                }
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Vui lòng nhập một số nguyên.");
+            duration = Helper.getIntInput(scanner, "Nhập thời lượng (số giờ): ");
+            if (duration <= 0) {
+                System.out.println("Thời lượng của khoá học phải lớn hơn 0.");
+                continue;
             }
+            break;
         }
 
         String instructor;
@@ -64,15 +59,8 @@ public class CourseView {
         System.out.println("=======================      CHỈNH SỬA THÔNG TIN KHOÁ HỌC      =======================");
         Course course = null;
         while (true) {
-            System.out.print("Nhập ID khoá học cần chỉnh sửa: ");
-            int id;
-            try {
-                id = Integer.parseInt(scanner.nextLine().trim());
-            } catch (NumberFormatException e) {
-                System.out.println("ID phải là một số nguyên, vui lòng nhập lại!");
-                continue;
-            }
-            course = courseService.getCourse(id);
+            int id = Helper.getIntInput(scanner, "Nhập ID khoá học cần chỉnh sửa: ");
+            course = courseService.getCourseByID(id);
             if (course == null) {
                 System.out.println("Không tìm thấy khoá học với ID: " + id);
             }
@@ -90,14 +78,7 @@ public class CourseView {
             System.out.println("2. Thời lượng");
             System.out.println("3. Giảng viên phụ trách");
             System.out.println("4. Quay lại");
-            System.out.print("Nhập lựa chọn của bạn: ");
-            int choice;
-            try {
-                choice = Integer.parseInt(scanner.nextLine().trim());
-            } catch (NumberFormatException e) {
-                System.out.println("Lựa chọn không hợp lệ, vui lòng chọn lại!");
-                continue;
-            }
+            int choice = Helper.getIntInput(scanner, "Nhập lựa chọn của bạn: ");
             switch (choice) {
                 case 1:
                     System.out.print("Nhập tên khoá học mới: ");
@@ -109,16 +90,11 @@ public class CourseView {
                     }
                     break;
                 case 2:
-                    System.out.print("Nhập thời lượng mới (số giờ): ");
-                    try {
-                        int newDuration = Integer.parseInt(scanner.nextLine().trim());
-                        if (newDuration > 0) {
-                            course.setDuration(newDuration);
-                        } else {
-                            System.out.println("Thời lượng phải lớn hơn 0, giữ nguyên giá trị cũ.");
-                        }
-                    } catch (NumberFormatException e) {
-                        System.out.println("Vui lòng nhập một số nguyên, giữ nguyên giá trị cũ.");
+                    int newDuration = Helper.getIntInput(scanner, "Nhập thời lượng mới (số giờ): ");
+                    if (newDuration > 0) {
+                        course.setDuration(newDuration);
+                    } else {
+                        System.out.println("Thời lượng phải lớn hơn 0, giữ nguyên giá trị cũ.");
                     }
                     break;
                 case 3:
@@ -150,15 +126,8 @@ public class CourseView {
     public static void deleteCourse(Scanner scanner) {
         Course course = null;
         while (true) {
-            System.out.print("Nhập ID khoá học cần xoá: ");
-            int id = -1;
-            try {
-                id = Integer.parseInt(scanner.nextLine().trim());
-            } catch (NumberFormatException e) {
-                System.out.println("ID phải là một số nguyên, vui lòng nhập lại!");
-                continue;
-            }
-            course = courseService.getCourse(id);
+            int id = Helper.getIntInput(scanner, "Nhập ID khoá học cần xoá: ");
+            course = courseService.getCourseByID(id);
             if (course == null) {
                 System.out.println("Không tìm thấy khoá học với ID: " + id);
                 continue;
@@ -197,43 +166,29 @@ public class CourseView {
         System.out.println("Chọn thuộc tính để sắp xếp: ");
         System.out.println("1. Tên khoá học");
         System.out.println("2. ID khoá học");
-        System.out.print("Lựa chọn của bạn: ");
-        int choice;
-        try {
-            choice = Integer.parseInt(scanner.nextLine().trim());
-        } catch (NumberFormatException e) {
-            System.out.println("Lựa chọn không hợp lệ, quay lại menu chính.");
-            return;
-        }
+        int choice = Helper.getIntInput(scanner, "Lựa chọn của bạn: ");
         System.out.println("Chọn thứ tự sắp xếp: ");
         System.out.println("1. Tăng dần");
         System.out.println("2. Giảm dần");
-        System.out.print("Lựa chọn của bạn: ");
-        int orderChoice;
-        try {
-            orderChoice = Integer.parseInt(scanner.nextLine().trim());
-        } catch (NumberFormatException e) {
-            System.out.println("Lựa chọn không hợp lệ, quay lại menu chính.");
-            return;
-        }
+        int orderChoice = Helper.getIntInput(scanner, "Lựa chọn của bạn: ");
 
         List<Course> sortedCourses;
         String orderBy;
         switch (choice) {
             case 1:
-
                 if (orderChoice == 1)
                     orderBy = "name asc";
                 else
                     orderBy = "name desc";
-
                 break;
+                
             case 2:
                 if (orderChoice == 1)
                     orderBy = "id asc";
                 else
                     orderBy = "id desc";
-                break;
+                break; 
+            
             default:
                 System.out.println("Lựa chọn không hợp lệ, quay lại menu chính.");
                 return;

@@ -228,4 +228,47 @@ public class StudentDAOImpl implements IStudentDAO {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public int countStudents() {
+        String sql = "SELECT COUNT(*) FROM student";
+        try (Connection conn = DBUtil.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Student> getStudentsListWithPaging(int currentPage, int pageSize) {
+        String sql = "SELECT * FROM student ORDER BY id LIMIT ? OFFSET ?";
+        try (Connection conn = DBUtil.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1, pageSize);
+            ps.setInt(2, (currentPage - 1) * pageSize);
+            ResultSet rs = ps.executeQuery();
+            List<Student> students = new ArrayList<>();
+            while (rs.next()) {
+                students.add(new Student(
+                    rs.getInt("id"),
+                    rs.getString("name"),
+                    rs.getDate("dob").toLocalDate(),
+                    rs.getString("email"),
+                    rs.getBoolean("sex"),
+                    rs.getString("phone"),
+                    rs.getString("password"),
+                    rs.getDate("create_at").toLocalDate()
+                ));
+            }
+            return students;
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

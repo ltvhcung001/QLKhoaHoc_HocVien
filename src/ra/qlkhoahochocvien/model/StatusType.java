@@ -5,4 +5,5 @@ public enum StatusType {
     DENIED,
     CANCEL,
     CONFIRM,
+    DELETED
 }

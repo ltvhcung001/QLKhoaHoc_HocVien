@@ -32,7 +32,7 @@ create table Course(
 );
 
 -- 5a. Create enum for status
-create type status_values as enum('WAITING', 'DENIED', 'CANCEL', 'CONFIRM');
+create type status_values as enum('WAITING', 'DENIED', 'CANCEL', 'CONFIRM', 'DELETED');
 
 -- 5. Create table Enrollment
 create table Enrollment(

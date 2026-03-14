@@ -15,10 +15,8 @@ public interface ICourseDAO {
     public List<Course> listCoursesOrderBy(String orderBy);
     public List<Course> listCoursesOrderByWithPagination(String orderBy, int page, int pageSize);
     public int countCourses();
-
     List<Course> listFullCoursesOrderBy(String orderBy);
-
     int countCoursesByName(String name);
-
     List<Course> getCourseByNameWithPagination(String name, int currentPage, int pageSize);
+
 }

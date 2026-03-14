@@ -5,6 +5,8 @@ import ra.qlkhoahochocvien.bussiness.IStudentService;
 import ra.qlkhoahochocvien.bussiness.impl.EnrollServiceImpl;
 import ra.qlkhoahochocvien.bussiness.impl.StudentServiceImpl;
 import ra.qlkhoahochocvien.model.Student;
+import ra.qlkhoahochocvien.utils.Helper;
+
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -36,29 +38,31 @@ public class StudentView {
             if (s != null) {
                 System.out.println("Đăng nhập thành công!");
                 studentLogin = s;
+                showMainMenu(scanner);
                 break;
             }
             else{
                 System.out.println("Đăng nhập thất bại, email hoặc password không đúng, hãy thử lại!");
+                break;
             }
         }
     }
 
     public static void showMainMenu(Scanner scanner) {
         while (true) {
-            System.out.println("============ MENU HỌC VIÊN ============");
-            System.out.println("1. Xem danh sách khoá học");
-            System.out.println("2. Tìm kiếm khoá học theo tên");
-            System.out.println("3. Đăng ký khoá học");
-            System.out.println("4. Xem khoá học đã đăng ký");
-            System.out.println("5. Huỷ đăng ký (nếu chưa bắt đầu)");
-            System.out.println("6. Đổi mật khẩu");
-            System.out.println("7. Đăng xuất");
-            System.out.print("Nhập lựa chọn của bạn: ");
-            int choice = Integer.parseInt(scanner.nextLine());
+            System.out.println("┌───────────────     MENU HỌC VIÊN      ───────────────┐");
+            System.out.println("│ 1. Xem danh sách khoá học                            │");
+            System.out.println("│ 2. Tìm kiếm khoá học theo tên                        │");
+            System.out.println("│ 3. Đăng ký khoá học                                  │");
+            System.out.println("│ 4. Xem khoá học đã đăng ký                           │");
+            System.out.println("│ 5. Huỷ đăng ký (nếu chưa được xác nhận)              │");
+            System.out.println("│ 6. Đổi mật khẩu                                      │");
+            System.out.println("│ 7. Đăng xuất                                         │");
+            System.out.println("└──────────────────────────────────────────────────────┘");
+            int choice = Helper.getIntInput(scanner, "Nhập lựa chọn của bạn: ");
             switch (choice) {
                 case 1:
-                    CourseView.showCourseList();
+                    CourseView.showCourseList(scanner);
                     break;
                 case 2:
                     CourseView.findCourseByName(scanner);
@@ -85,25 +89,5 @@ public class StudentView {
         }
 
     }
-
-    public static void showMenuRegister(Scanner scanner){
-        while (true) {
-            System.out.print("Nhập họ và tên: ");
-            String name = scanner.nextLine();
-            System.out.print("Nhập ngày sinh (yyyy-MM-dd): ");
-            LocalDate dob = LocalDate.parse(scanner.nextLine());
-            System.out.print("Nhập email: ");
-            String email = scanner.nextLine();
-            System.out.print("Chọn giới tính (true - Nam, false - Nữ): ");
-            boolean sex = Boolean.parseBoolean(scanner.nextLine());
-            System.out.print("Số điện thoại: ");
-            String phone = scanner.nextLine();
-            System.out.print("Nhập mật khẩu");
-            String password = scanner.nextLine();
-            Student student = new Student(name, dob, email, sex, phone, password);
-        }
-
-    }
-
 
 }

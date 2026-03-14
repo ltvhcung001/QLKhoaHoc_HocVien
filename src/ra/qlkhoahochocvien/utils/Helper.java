@@ -141,10 +141,10 @@ public class Helper {
 //                new Enrollment(5, 1, 3, java.time.LocalDateTime.now(), StatusType.CANCEL),
 //                new Enrollment(6, 3, 1, java.time.LocalDateTime.now(), StatusType.WAITING)
 //        );
-////        printEnrollmentsByStudents(enrollments, courses, 3);
-//        String password = "123";
-//        System.out.println(BCrypt.hashpw(password, BCrypt.gensalt(12)));
-        printMainMenu();
+//        printEnrollmentsByStudents(enrollments, courses, 3);
+        String password = "123";
+        System.out.println(BCrypt.hashpw(password, BCrypt.gensalt(12)));
+//        printMainMenu();
     }
 
     public static void printMainMenu(){
@@ -155,4 +155,22 @@ public class Helper {
         System.out.println("│ 4. Thoát                                             │");
         System.out.println("└──────────────────────────────────────────────────────┘");
     }
+
+    public static int getIntInput(Scanner scanner, String prompt) {
+        int choice;
+        while (true) {
+            System.out.print(prompt);
+            try {
+                choice = Integer.parseInt(scanner.nextLine().trim());
+                if (choice < 0){
+                    System.out.println("Nhập số lớn hơn 0");
+                    continue;
+                }
+                return choice;
+            } catch (NumberFormatException e) {
+                System.out.println("Lựa chọn không hợp lệ, vui lòng nhập lại!");
+            }
+        }
+    }
+
 }

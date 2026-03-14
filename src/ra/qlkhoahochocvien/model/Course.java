@@ -1,7 +1,6 @@
 package ra.qlkhoahochocvien.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Course {
     private int id;

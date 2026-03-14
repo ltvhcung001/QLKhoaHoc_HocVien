@@ -14,5 +14,8 @@ public interface IStudentDAO {
     List<Student> findStudentsByName(String name);
     List<Student> findStudentsByEmail(String email);
     List<Student> listStudentsOrderBy(String orderBy);
+    int countStudents();
+
+    List<Student> getStudentsListWithPaging(int currentPage, int pageSize);
 }
 
