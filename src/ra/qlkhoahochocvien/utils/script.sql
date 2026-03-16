@@ -15,7 +15,7 @@ create table Student(
     id serial primary key,
     name varchar(100) not null,
     dob date not null,
-    email varchar(100) not null,
+    email varchar(100) not null unique,
     sex bit not null,
     phone varchar(20),
     password varchar(255) not null,
@@ -40,7 +40,7 @@ create table Enrollment(
     student_id int references Student(id) not null,
     course_id int references Course(id) not null,
     registered_at timestamp default current_timestamp,
-    status status_values
+    status status_values default 'WAITING'::status_values
 );
 
 -- 6. Create fake data for Courses

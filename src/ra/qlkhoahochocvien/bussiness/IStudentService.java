@@ -9,11 +9,13 @@ public interface IStudentService {
     Student login(String email, String password);
     void showStudents(Scanner scanner);
     Student getStudentById(int id);
-    void addStudent(Scanner scanner) throws  Exception;
-    void updateStudent(Scanner scanner) throws  Exception;
+    void addStudent(Scanner scanner);
+    void updateStudent(Scanner scanner);
     void deleteStudent(Scanner scanner);
-    void getStudents(Scanner scanner) throws  Exception;
+    void getStudents(Scanner scanner);
     void showStudentInSorted(Scanner scanner);
     List<Student> getStudentsList();
     void changePassword(Scanner scanner);
+
+    int countStudent();
 }

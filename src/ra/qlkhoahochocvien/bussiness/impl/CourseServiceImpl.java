@@ -31,7 +31,7 @@ public class CourseServiceImpl implements ICourseService {
             System.out.println("============================= DANH SÁCH KHOÁ HỌC =============================");
             Helper.printCourses(courses);
             System.out.printf("Trang %d / %d  (Tổng: %d khoá học)\n", currentPage, totalPages, totalCourses);
-            System.out.println("[N] Trang sau  [P] Trang trước  [G] Đến trang  [Q] Thoát");
+            System.out.println("[N] Trang sau  [P] Trang trước  [G] Đến trang  [L] Đề xuất 5 khoá học có nhiều lượt đăng ký nhất  [Q] Thoát");
             System.out.print("Nhập lệnh: ");
             String cmd = scanner.nextLine().trim().toUpperCase();
             switch (cmd) {
@@ -53,51 +53,10 @@ public class CourseServiceImpl implements ICourseService {
                         System.out.println("Nhập không hợp lệ.");
                     }
                     break;
-                case "Q":
-                    return;
-                default:
-                    System.out.println("Lệnh không hợp lệ.");
-            }
-        }
-    }
-
-    @Override
-    public void listCoursesByUser(Scanner scanner) {
-        final int PAGE_SIZE = 5;
-        int totalCourses = enrollDAO.countCoursesByStudentId(StudentView.studentLogin.getId());
-        if (totalCourses == 0) {
-            System.out.println("Chưa có khoá học nào.");
-            return;
-        }
-        int totalPages = (int) Math.ceil((double) totalCourses / PAGE_SIZE);
-        int currentPage = 1;
-
-        while (true) {
-            List<Course> courses = courseDAO.listCoursesWithPagination(currentPage, PAGE_SIZE);
-            System.out.println("============================= DANH SÁCH KHOÁ HỌC ĐÃ ĐĂNG KÝ =============================");
-            Helper.printCourses(courses);
-            System.out.printf("Trang %d / %d  (Tổng: %d khoá học)\n", currentPage, totalPages, totalCourses);
-            System.out.println("[N] Trang sau  [P] Trang trước  [G] Đến trang  [Q] Thoát");
-            System.out.print("Nhập lệnh: ");
-            String cmd = scanner.nextLine().trim().toUpperCase();
-            switch (cmd) {
-                case "N":
-                    if (currentPage < totalPages) currentPage++;
-                    else System.out.println("Đã ở trang cuối.");
-                    break;
-                case "P":
-                    if (currentPage > 1) currentPage--;
-                    else System.out.println("Đã ở trang đầu.");
-                    break;
-                case "G":
-                    System.out.printf("Nhập số trang (1-%d): ", totalPages);
-                    try {
-                        int page = Integer.parseInt(scanner.nextLine().trim());
-                        if (page >= 1 && page <= totalPages) currentPage = page;
-                        else System.out.println("Số trang không hợp lệ.");
-                    } catch (NumberFormatException e) {
-                        System.out.println("Nhập không hợp lệ.");
-                    }
+                case "L":
+                    List<Course> topCourses = enrollDAO.getTop5CoursesByEnrollment();
+                    System.out.println("============================= TOP 5 KHOÁ HỌC ĐƯỢC ĐĂNG KÝ NHIỀU NHẤT =============================");
+                    Helper.printCourses(topCourses);
                     break;
                 case "Q":
                     return;
@@ -106,7 +65,6 @@ public class CourseServiceImpl implements ICourseService {
             }
         }
     }
-
 
     @Override
     public Course getCourseByID(int id) {
@@ -223,12 +181,12 @@ public class CourseServiceImpl implements ICourseService {
     }
 
     @Override
-    public List<Course> listFullCoursesOrderBy(String orderBy) {
-        return courseDAO.listFullCoursesOrderBy(orderBy);
+    public int countCourse() {
+        return courseDAO.countStudents();
     }
 
     @Override
-    public List<Course> getListCourses() {
-        return courseDAO.listCourses();
+    public List<Course> listFullCoursesOrderBy(String orderBy) {
+        return courseDAO.listFullCoursesOrderBy(orderBy);
     }
 }

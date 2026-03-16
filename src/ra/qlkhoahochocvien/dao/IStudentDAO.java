@@ -17,5 +17,7 @@ public interface IStudentDAO {
     int countStudents();
 
     List<Student> getStudentsListWithPaging(int currentPage, int pageSize);
+
+    boolean findStudentByPhone(String phone);
 }
 

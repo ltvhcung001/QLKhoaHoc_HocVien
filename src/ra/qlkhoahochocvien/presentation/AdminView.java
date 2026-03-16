@@ -62,7 +62,6 @@ public class AdminView {
             System.out.println("│ 4. Thống kê học viên theo khoá học                   │");
             System.out.println("│ 5. Đăng xuất                                         │");
             System.out.println("└──────────────────────────────────────────────────────┘");
-            System.out.print("Nhập lựa chọn của bạn: ");
             int choice = Helper.getIntInput(scanner, "Nhập lựa chọn của bạn: ");
             switch (choice) {
                 case 1:

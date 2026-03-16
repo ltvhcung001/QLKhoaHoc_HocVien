@@ -173,4 +173,52 @@ public class Helper {
         }
     }
 
+    public static LocalDate getDateInput(Scanner scanner, String prompt) {
+        LocalDate date;
+        while (true) {
+            System.out.print(prompt);
+            try {
+                date = LocalDate.parse(scanner.nextLine().trim());
+                return date;
+            } catch (Exception e) {
+                System.out.println("Ngày không hợp lệ, vui lòng nhập lại! (Định dạng: YYYY-MM-DD)");
+            }
+        }
+    }
+
+    public static String getEmailInput(Scanner scanner, String prompt) {
+        String email;
+        while (true) {
+            System.out.print(prompt);
+            email = scanner.nextLine().trim();
+            if (email.isEmpty()) {
+                System.out.println("Email không được để trống.");
+                continue;
+            }
+            // Định dạng email cơ bản: phải có @ và . sau @
+            if (!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$")) {
+                System.out.println("Email không hợp lệ, vui lòng nhập lại!");
+                continue;
+            }
+            return email;
+        }
+    }
+
+    public static void printNumberOfStudentInCourse(List<Course> courses, List<Long> numberOfStudent) {
+        System.out.println("┌──────┬──────────────────────────────────────────────────┬──────────────────────────────┐");
+        System.out.printf("│%-6s│%-50s│%-30s│\n",
+                "ID",
+                "Name",
+                "Number of Student");
+        System.out.println("├──────┼──────────────────────────────────────────────────┼──────────────────────────────┤");
+        for (Course c : courses) {
+            System.out.printf("│%-6d│%-50s│%-30s│\n",
+                    c.getId(),
+                    c.getName().length() > 50 ? c.getName().substring(0, 47) + "..." : c.getName(),
+                    numberOfStudent.get(courses.indexOf(c)));
+        }
+        System.out.println("└──────┴──────────────────────────────────────────────────┴──────────────────────────────┘");
+
+    }
+
 }

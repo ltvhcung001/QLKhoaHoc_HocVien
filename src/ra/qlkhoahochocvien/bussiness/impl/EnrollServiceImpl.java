@@ -12,7 +12,6 @@ import ra.qlkhoahochocvien.model.Student;
 import ra.qlkhoahochocvien.presentation.StudentView;
 import ra.qlkhoahochocvien.utils.Helper;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -334,9 +333,8 @@ public class EnrollServiceImpl implements IEnrollService {
 
     @Override
     public void showTotalCoursesAndStudents() {
-        List<Enrollment> enrollments = enrollDAO.getEnrollments();
-        long totalCourses = enrollments.stream().map(Enrollment::getCourse_id).distinct().count();
-        long totalStudents = enrollments.stream().map(Enrollment::getStudent_id).distinct().count();
+        int totalCourses = courseService.countCourse();
+        int totalStudents = studentService.countStudent();
         System.out.println("Tổng số lượng khoá học: " + totalCourses);
         System.out.println("Tổng số lượng học viên: " + totalStudents);
     }
@@ -345,32 +343,25 @@ public class EnrollServiceImpl implements IEnrollService {
     public void showNumberOfStudentsByCourse() {
         List<Enrollment> enrollments = enrollDAO.getEnrollments();
         List<Course> courses = courseService.listFullCoursesOrderBy("id");
-        List<Student> students = studentService.getStudentsList();
-        for (Course course : courses) {
-            long count = enrollments.stream()
-                    .filter(e -> e.getCourse_id() == course.getId() && e.getStatus() == StatusType.CONFIRM)
-                    .count();
-            System.out.println("Khoá học: " + course.getName() + " (ID: " + course.getId() + ") - Số lượng học viên đã đăng ký: " + count);
-        }
+        List<Long> counts = courses.stream()
+                .map(course -> enrollments.stream()
+                        .filter(e -> e.getCourse_id() == course.getId() && e.getStatus() == StatusType.CONFIRM)
+                        .count())
+                .toList();
+        Helper.printNumberOfStudentInCourse(courses, counts);
+
     }
 
     @Override
     public void showTop5CoursesByEnrollment() {
-        List<Enrollment> enrollments = enrollDAO.getEnrollments();
-        List<Course> courses = courseService.listFullCoursesOrderBy("id");
-        System.out.println("Top 5 khoá học đông học viên nhất:");
-        courses.stream()
-                .sorted((c1, c2) -> Long.compare(
-                        enrollments.stream().filter(e -> e.getCourse_id() == c2.getId() && e.getStatus() == StatusType.CONFIRM).count(),
-                        enrollments.stream().filter(e -> e.getCourse_id() == c1.getId() && e.getStatus() == StatusType.CONFIRM).count()
-                ))
-                .limit(5)
-                .forEach(course -> {
-                    long count = enrollments.stream()
-                            .filter(e -> e.getCourse_id() == course.getId() && e.getStatus() == StatusType.CONFIRM)
-                            .count();
-                    System.out.println("Khoá học: " + course.getName() + " (ID: " + course.getId() + ") - Số lượng học viên đã đăng ký: " + count);
-                });
+        List<Course> courses = enrollDAO.getTop5CoursesByEnrollment();
+        System.out.println("========= TOP 5 KHOÁ HỌC ĐÔNG HỌC VIÊN NHẤT =========");
+        Helper.printNumberOfStudentInCourse(courses, courses.stream().map(
+                course -> {
+                    long count = enrollDAO.countNumberOfConfirmEnrollmentsByCourseId(course.getId());
+                    return count;
+                }
+        ).toList());
     }
 
     @Override

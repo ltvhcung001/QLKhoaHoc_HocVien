@@ -12,18 +12,11 @@ public class AdminServiceImpl implements IAdminService {
     @Override
     public Admin login(String username, String password) {
         Admin admin = adminDAO.findAdminByUsername(username);
-
-
         if (admin != null){
             if(BCrypt.checkpw(password, admin.getPassword()))
                 return admin;
         }
-
         return null;
     }
 
-    @Override
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
 }

@@ -526,4 +526,30 @@ public class EnrollDAOImpl implements IEnrollDAO {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public List<Course> getTop5CoursesByEnrollment() {
+        String sql = """
+                SELECT c.*, COUNT(e.student_id) AS enrollment_count
+                FROM course c LEFT JOIN enrollment e ON c.id = e.course_id 
+                WHERE status = 'CONFIRM'::status_values
+                GROUP BY c.id ORDER BY enrollment_count DESC LIMIT 5""";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            List<Course> courses = new ArrayList<>();
+            while (rs.next()) {
+                courses.add(new Course(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getInt("duration"),
+                        rs.getString("instructor"),
+                        rs.getDate("create_at").toLocalDate()
+                ));
+            }
+            return courses;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

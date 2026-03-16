@@ -126,49 +126,6 @@ public class CourseDAOImpl implements ICourseDAO {
     }
 
     @Override
-    public List<Course> getCourseByName(String name) {
-        String sql = "SELECT * FROM course WHERE name ILIKE ? ORDER BY id";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);) {
-            ps.setString(1, "%" + name + "%");
-            ResultSet rs = ps.executeQuery();
-            List<Course> courses = new ArrayList<>();
-            while (rs.next()) {
-                courses.add(new Course(rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getInt("duration"),
-                        rs.getString("instructor"),
-                        rs.getDate("create_at").toLocalDate()));
-            }
-            return courses;
-        }
-        catch (Exception e){
-            throw new RuntimeException(e);
-        }
-    }
-
-    public List<Course> listCoursesOrderBy(String orderBy) {
-        String sql = "SELECT * FROM course ORDER BY " + orderBy;
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ResultSet rs = ps.executeQuery();
-            List<Course> courses = new ArrayList<>();
-            while (rs.next()) {
-                courses.add(new Course(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getInt("duration"),
-                        rs.getString("instructor"),
-                        rs.getDate("create_at").toLocalDate()
-                ));
-            }
-            return courses;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
     public List<Course> listCoursesOrderByWithPagination(String orderBy, int page, int pageSize) {
         String sql = "SELECT * FROM course ORDER BY " + orderBy + " LIMIT ? OFFSET ?";
         try (Connection conn = DBUtil.getConnection();
@@ -266,4 +223,20 @@ public class CourseDAOImpl implements ICourseDAO {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public int countStudents() {
+        String sql = "SELECT COUNT(DISTINCT student_id) FROM course";
+        try (Connection conn = DBUtil.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+            return 0;
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }

@@ -11,12 +11,10 @@ public interface ICourseDAO {
     public boolean addCourse(Course c);
     public boolean updateCourse(Course c);
     public boolean deleteCourse(int id);
-    public List<Course> getCourseByName(String name);
-    public List<Course> listCoursesOrderBy(String orderBy);
     public List<Course> listCoursesOrderByWithPagination(String orderBy, int page, int pageSize);
     public int countCourses();
     List<Course> listFullCoursesOrderBy(String orderBy);
     int countCoursesByName(String name);
     List<Course> getCourseByNameWithPagination(String name, int currentPage, int pageSize);
-
+    int countStudents();
 }

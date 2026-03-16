@@ -85,17 +85,18 @@ public class StudentServiceImpl implements IStudentService {
         System.out.println("Nhập thông tin sinh viên mới:");
         System.out.print("Họ tên: ");
         student.setName(scanner.nextLine());
-        while (true) {
-             System.out.print("Ngày sinh (yyyy-MM-dd): ");
-             try {
-                student.setDob(LocalDate.parse(scanner.nextLine()));
-                break;
-            } catch (Exception e) {
-                System.out.println("Ngày sinh không hợp lệ, vui lòng nhập lại theo định dạng yyyy-MM-dd");
+        student.setDob(Helper.getDateInput(scanner, "Ngày sinh (yyyy-MM-dd): "));
+        String email = Helper.getEmailInput(scanner, "Email: ");
+        while (studentDAO.findStudentByEmail(email) != null || email.isEmpty()) {
+            if (student.getEmail().isEmpty()) {
+                System.out.println("Email không được để trống, vui lòng nhập lại.");
             }
+            else {
+                System.out.println("Email đã tồn tại, vui lòng sử dụng email khác.");
+            }
+            System.out.print("Email: ");
+            student.setEmail(scanner.nextLine());
         }
-        System.out.print("Email: ");
-        student.setEmail(scanner.nextLine());
         System.out.print("Nhập giới tính (Nam/Nữ): ");
         String genderInput = scanner.nextLine();
         while (!genderInput.equalsIgnoreCase("Nam") && !genderInput.equalsIgnoreCase("Nữ")) {
@@ -105,6 +106,11 @@ public class StudentServiceImpl implements IStudentService {
         student.setSex(genderInput.equalsIgnoreCase("Nam"));
         System.out.print("Nhập số điện thoại: ");
         student.setPhone(scanner.nextLine());
+        while (studentDAO.findStudentByPhone(student.getPhone())){
+            System.out.println("Số điện thoại đã tồn tại, vui lòng sử dụng số điện thoại khác.");
+            System.out.print("Nhập số điện thoại: ");
+            student.setPhone(scanner.nextLine());
+        }
         System.out.print("Password: ");
         String password = scanner.nextLine();
         while (password.isEmpty()) {
@@ -118,7 +124,7 @@ public class StudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public void updateStudent(Scanner scanner) throws Exception {
+    public void updateStudent(Scanner scanner){
         System.out.println("=======================      CẬP NHẬT THÔNG TIN SINH VIÊN      =======================");
         int id = Helper.getIntInput(scanner, "Nhập ID sinh viên cần cập nhật: ");
         Student existingStudent = studentDAO.getStudentById(id);
@@ -232,7 +238,7 @@ public class StudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public void getStudents(Scanner scanner) throws Exception {
+    public void getStudents(Scanner scanner){
         System.out.println("Chọn tiêu chí tìm kiếm: ");
         System.out.println("1. Tìm kiếm theo tên");
         System.out.println("2. Tìm kiếm theo email");
@@ -422,5 +428,10 @@ public class StudentServiceImpl implements IStudentService {
         StudentView.studentLogin.setPassword(hashedPassword);
         studentDAO.updateStudent(StudentView.studentLogin);
         System.out.println("Đã đổi mật khẩu thành công!");
+    }
+
+    @Override
+    public int countStudent() {
+        return studentDAO.countStudents();
     }
 }

@@ -271,4 +271,18 @@ public class StudentDAOImpl implements IStudentDAO {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public boolean findStudentByPhone(String phone) {
+        String sql = "SELECT * FROM student WHERE phone = ?";
+        try (Connection conn = DBUtil.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql);) {
+            ps.setString(1, phone);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
