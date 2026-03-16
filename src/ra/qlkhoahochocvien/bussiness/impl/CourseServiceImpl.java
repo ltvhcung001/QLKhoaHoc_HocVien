@@ -1,6 +1,7 @@
 package ra.qlkhoahochocvien.bussiness.impl;
 
 import ra.qlkhoahochocvien.bussiness.ICourseService;
+import ra.qlkhoahochocvien.bussiness.IEnrollService;
 import ra.qlkhoahochocvien.dao.ICourseDAO;
 import ra.qlkhoahochocvien.dao.IEnrollDAO;
 import ra.qlkhoahochocvien.dao.impl.CourseDAOImpl;
@@ -15,6 +16,7 @@ import java.util.Scanner;
 public class CourseServiceImpl implements ICourseService {
     public final ICourseDAO courseDAO = new CourseDAOImpl();
     public final IEnrollDAO enrollDAO = new EnrollDAOImpl();
+
     @Override
     public void listCourses(Scanner scanner) {
         final int PAGE_SIZE = 5;
@@ -56,7 +58,14 @@ public class CourseServiceImpl implements ICourseService {
                 case "L":
                     List<Course> topCourses = enrollDAO.getTop5CoursesByEnrollment();
                     System.out.println("============================= TOP 5 KHOÁ HỌC ĐƯỢC ĐĂNG KÝ NHIỀU NHẤT =============================");
-                    Helper.printCourses(topCourses);
+                    Helper.printNumberOfStudentInCourse(topCourses, topCourses.stream().map(
+                            course -> {
+                                long count = enrollDAO.countNumberOfConfirmEnrollmentsByCourseId(course.getId());
+                                return count;
+                            }
+                    ).toList());
+                    System.out.println("Nhấn Enter để tiếp tục...");
+                    scanner.nextLine();
                     break;
                 case "Q":
                     return;
