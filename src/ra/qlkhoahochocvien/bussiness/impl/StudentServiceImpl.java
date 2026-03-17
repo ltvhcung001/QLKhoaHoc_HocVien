@@ -86,17 +86,18 @@ public class StudentServiceImpl implements IStudentService {
         System.out.print("Họ tên: ");
         student.setName(scanner.nextLine());
         student.setDob(Helper.getDateInput(scanner, "Ngày sinh (yyyy-MM-dd): "));
-        String email = Helper.getEmailInput(scanner, "Email: ");
-        while (studentDAO.findStudentByEmail(email) != null || email.isEmpty()) {
-            if (student.getEmail().isEmpty()) {
-                System.out.println("Email không được để trống, vui lòng nhập lại.");
+
+        do {
+            String email = Helper.getEmailInput(scanner, "Email: ");
+            if (studentDAO.findStudentsByEmail(email) != null) {
+                System.out.println("Email đã tồn tại.");
             }
             else {
-                System.out.println("Email đã tồn tại, vui lòng sử dụng email khác.");
+                student.setEmail(email);
+                break;
             }
-            System.out.print("Email: ");
-            student.setEmail(scanner.nextLine());
         }
+        while (true);
         System.out.print("Nhập giới tính (Nam/Nữ): ");
         String genderInput = scanner.nextLine();
         while (!genderInput.equalsIgnoreCase("Nam") && !genderInput.equalsIgnoreCase("Nữ")) {
