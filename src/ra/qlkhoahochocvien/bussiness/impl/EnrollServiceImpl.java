@@ -367,18 +367,19 @@ public class EnrollServiceImpl implements IEnrollService {
     @Override
     public void showCoursesWithMoreThan10Students() {
         List<Enrollment> enrollments = enrollDAO.getEnrollments();
-        List<Course> courses = courseService.listFullCoursesOrderBy("id");
-        System.out.println("Khoá học có trên 10 học viên đã đăng ký:");
-        courses.stream()
+        List<Course> fullCourses = courseService.listFullCoursesOrderBy("id");
+        System.out.println("===== KHOÁ HỌC CÓ TRÊN 10 HỌC VIÊN ĐĂNG KÝ =====");
+        List<Course> courses = fullCourses.stream()
                 .filter(course -> enrollments.stream()
                         .filter(e -> e.getCourse_id() == course.getId() && e.getStatus() == StatusType.CONFIRM)
-                        .count() > 10)
-                .forEach(course -> {
-                    long count = enrollments.stream()
-                            .filter(e -> e.getCourse_id() == course.getId() && e.getStatus() == StatusType.CONFIRM)
-                            .count();
-                    System.out.println("Khoá học: " + course.getName() + " (ID: " + course.getId() + ") - Số lượng học viên đã đăng ký: " + count);
-                });
+                        .count() >= 10)
+                .toList();
+        List<Long> counts = courses.stream()
+                .map(course -> enrollments.stream()
+                        .filter(e -> e.getCourse_id() == course.getId() && e.getStatus() == StatusType.CONFIRM)
+                        .count())
+                .toList();
+        Helper.printNumberOfStudentInCourse(courses, counts);
     }
 
 

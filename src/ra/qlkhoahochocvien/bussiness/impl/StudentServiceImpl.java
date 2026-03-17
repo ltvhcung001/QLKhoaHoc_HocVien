@@ -404,11 +404,6 @@ public class StudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public List<Student> getStudentsList() {
-        return studentDAO.listStudentsOrderBy("id asc");
-    }
-
-    @Override
     public void changePassword(Scanner scanner) {
         System.out.print("Nhập mật khẩu cũ: ");
         String oldPassword = scanner.nextLine();

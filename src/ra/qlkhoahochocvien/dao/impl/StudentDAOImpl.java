@@ -39,32 +39,6 @@ public class StudentDAOImpl implements IStudentDAO {
     }
 
     @Override
-    public List<Student> getStudents() {
-        String sql = "SELECT * FROM student ORDER BY id";
-        try (Connection conn = DBUtil.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql);){
-            ResultSet rs = ps.executeQuery();
-            List<Student> students = new ArrayList<>();
-            while (rs.next()) {
-                students.add(new Student(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getDate("dob").toLocalDate(),
-                        rs.getString("email"),
-                        rs.getBoolean("sex"),
-                        rs.getString("phone"),
-                        rs.getString("password"),
-                        rs.getDate("create_at").toLocalDate()
-                ));
-            }
-            return students;
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
     public Student getStudentById(int id) {
         String sql = "SELECT * FROM student WHERE id = ?";
         try (Connection conn = DBUtil.getConnection();

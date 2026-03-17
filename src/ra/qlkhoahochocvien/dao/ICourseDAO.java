@@ -5,7 +5,6 @@ import ra.qlkhoahochocvien.model.Course;
 import java.util.List;
 
 public interface ICourseDAO {
-    public List<Course> listCourses();
     public List<Course> listCoursesWithPagination(int page, int pageSize);
     public Course getCourse(int id);
     public boolean addCourse(Course c);

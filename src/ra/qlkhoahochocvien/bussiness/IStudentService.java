@@ -14,8 +14,6 @@ public interface IStudentService {
     void deleteStudent(Scanner scanner);
     void getStudents(Scanner scanner);
     void showStudentInSorted(Scanner scanner);
-    List<Student> getStudentsList();
     void changePassword(Scanner scanner);
-
     int countStudent();
 }

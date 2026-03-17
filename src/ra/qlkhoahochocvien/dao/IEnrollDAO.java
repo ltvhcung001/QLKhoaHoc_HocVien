@@ -27,7 +27,6 @@ public interface IEnrollDAO {
     List<Course> getWaitingCoursesByAdminUsingStudentIDWithPaging(int studentId, int page, int pageSize);
     int countNumberOfWaitingCoursesByStudentID(int studentId);
     int countNumberOfConfirmCoursesByStudentID(int studentId);
-    int countCoursesByStudentId(int studentId);
     List<Course> getWaitingCourseByStudentIdWithPaging(int id, int currentPage, int pageSize);
     int countWaitingEnrollmentsByStudentId(int studentId);
     int countNumberOfCoursesCanEnrollByStudentUsingStudentID(int studentId);

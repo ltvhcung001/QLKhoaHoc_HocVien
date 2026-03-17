@@ -8,7 +8,6 @@ import ra.qlkhoahochocvien.model.Admin;
 
 public class AdminServiceImpl implements IAdminService {
     public final IAdminDAO adminDAO = new AdminDAOImpl();
-    int pageSize = 5;
     @Override
     public Admin login(String username, String password) {
         Admin admin = adminDAO.findAdminByUsername(username);

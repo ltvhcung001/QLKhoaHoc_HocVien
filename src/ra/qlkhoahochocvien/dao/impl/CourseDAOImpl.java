@@ -13,28 +13,6 @@ import java.util.List;
 public class CourseDAOImpl implements ICourseDAO {
 
     @Override
-    public List<Course> listCourses() {
-        String sql = "SELECT * FROM course ORDER BY id";
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);){
-            ResultSet rs = ps.executeQuery();
-            List<Course> courses = new ArrayList<>();
-            while (rs.next()) {
-                courses.add(new Course(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getInt("duration"),
-                        rs.getString("instructor"),
-                        rs.getDate("create_at").toLocalDate()
-                ));
-            }
-            return courses;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
     public List<Course> listCoursesWithPagination(int page, int pageSize) {
         String sql = "SELECT * FROM course ORDER BY id LIMIT ? OFFSET ?";
         try (Connection conn = DBUtil.getConnection();
@@ -226,7 +204,7 @@ public class CourseDAOImpl implements ICourseDAO {
 
     @Override
     public int countStudents() {
-        String sql = "SELECT COUNT(DISTINCT student_id) FROM course";
+        String sql = "SELECT COUNT(DISTINCT id) FROM course";
         try (Connection conn = DBUtil.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();

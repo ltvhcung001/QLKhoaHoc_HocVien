@@ -441,23 +441,6 @@ public class EnrollDAOImpl implements IEnrollDAO {
     }
 
     @Override
-    public int countCoursesByStudentId(int userId) {
-        String sql = "SELECT COUNT(*) FROM enrollment WHERE student_id = ?";
-        try (Connection conn = DBUtil.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)){
-            ps.setInt(1, 1);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-            return 0;
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
     public List<Course> getWaitingCourseByStudentIdWithPaging(int studentId, int currentPage, int pageSize) {
         String sql = """
                         SELECT * FROM course 

@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface IStudentDAO {
     Student findStudentByEmail(String email);
-    List<Student> getStudents();
     Student getStudentById(int id);
     void addStudent(Student student);
     void updateStudent(Student student);
@@ -15,9 +14,7 @@ public interface IStudentDAO {
     List<Student> findStudentsByEmail(String email);
     List<Student> listStudentsOrderBy(String orderBy);
     int countStudents();
-
     List<Student> getStudentsListWithPaging(int currentPage, int pageSize);
-
     boolean findStudentByPhone(String phone);
 }
 
